@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciador de Tarefas</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <i class="fas fa-check-circle logo-icon"></i>
+      <h1>Gerenciador de Tarefas</h1>
+      <p>Organize suas atividades de forma simples e eficiente</p>
+    </div>
+    
+    <form id="nova-tarefa" class="task-form">
+      <div class="input-group">
+        <div class="input-fields">
+          <input name="titulo" type="text" placeholder="Título da tarefa..." required />
+          <input name="descricao" type="text" placeholder="Descrição da tarefa..." required />
+          <input name="dataVencimento" type="date" required />
+        </div>
+        <button type="submit">
+          <i class="fas fa-plus"></i>
+          Adicionar
+        </button>
+      </div>
+    </form>
+
+    <div class="search-container">
+      <input type="text" id="busca" class="search-input" placeholder="Buscar tarefas..." />
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">Todas</button>
+      <button class="filter-btn" data-filter="pendente">Pendentes</button>
+      <button class="filter-btn" data-filter="concluida">Concluídas</button>
+      <select id="ordenacao" class="sort-select">
+        <option value="data">Ordenar por Data</option>
+        <option value="titulo">Ordenar por Título</option>
+      </select>
+    </div>
+
+    <ul id="lista-tarefas" class="task-list"></ul>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="script.js"></script>
+</body>
+</html>
