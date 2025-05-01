@@ -1,0 +1,3 @@
+[build]
+  command = ""  
+  publish = "src/main/resources/static"
