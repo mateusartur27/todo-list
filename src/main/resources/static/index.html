@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="css/flatpickr-custom.css" />
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 </head>
 <body>
   <div class="container">
@@ -21,18 +25,21 @@
         <div class="input-fields">
           <input name="titulo" type="text" placeholder="Título da tarefa..." required />
           <input name="descricao" type="text" placeholder="Descrição da tarefa..." required />
-          <input name="dataVencimento" type="date" required />
+          <input name="dataVencimento" type="text" placeholder="DD/MM/AAAA" maxlength="10" required />
         </div>
-        <button type="submit">
+        <button type="submit" class="input-group button">
           <i class="fas fa-plus"></i>
           Adicionar
-        </button>
+        </button>       
       </div>
     </form>
 
-    <div class="search-container">
+    <div id="resumo-estatistico" class="stats-container">
+      <!-- O conteúdo será preenchido dinamicamente via JavaScript -->
+    </div>
+
+    <div class="search-container" style="margin:30px auto !important;">
       <input type="text" id="busca" class="search-input" placeholder="Buscar tarefas..." />
-      <i class="fas fa-search search-icon"></i>
     </div>
 
     <div class="filter-buttons">
@@ -40,15 +47,21 @@
       <button class="filter-btn" data-filter="pendente">Pendentes</button>
       <button class="filter-btn" data-filter="concluida">Concluídas</button>
       <select id="ordenacao" class="sort-select">
+        <option value="criacao">Ordenar por Adição</option>
         <option value="data">Ordenar por Data</option>
         <option value="titulo">Ordenar por Título</option>
       </select>
+      <button id="exportar-lista" class="export-button">
+        <i class="fas fa-download"></i>
+        Exportar Lista
+      </button>
     </div>
 
     <ul id="lista-tarefas" class="task-list"></ul>
   </div>
 
   <div id="toast-container" class="toast-container"></div>
+  <script src="index.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

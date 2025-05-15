@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Gerenciador de Tarefas</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-header">
+      <i class="fas fa-check-circle logo-icon"></i>
+      <h1>Gerenciador de Tarefas</h1>
+      <p>Organize suas atividades de forma simples e eficiente</p>
+    </div>
+    
+    <div class="auth-tabs">
+      <button class="tab-btn active" data-tab="login">Login</button>
+      <button class="tab-btn" data-tab="registro">Registro</button>
+    </div>
+
+    <div class="auth-form-container">
+      <!-- Formulário de Login -->
+      <form id="login-form" class="auth-form active">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="Seu email" required />
+        </div>
+        <div class="form-group">
+          <label for="login-senha">Senha</label>
+          <input type="password" id="login-senha" name="senha" placeholder="Sua senha" required />
+        </div>
+        <button type="submit" class="auth-button">
+          <i class="fas fa-sign-in-alt"></i> Entrar
+        </button>
+      </form>
+
+      <!-- Formulário de Registro -->
+      <form id="registro-form" class="auth-form">
+        <div class="form-group">
+          <label for="registro-nome">Nome</label>
+          <input type="text" id="registro-nome" name="nome" placeholder="Seu nome completo" required />
+        </div>
+        <div class="form-group">
+          <label for="registro-email">Email</label>
+          <input type="email" id="registro-email" name="email" placeholder="Seu email" required />
+        </div>
+        <div class="form-group">
+          <label for="registro-senha">Senha</label>
+          <input type="password" id="registro-senha" name="senha" placeholder="Sua senha" required />
+        </div>
+        <div class="form-group">
+          <label for="registro-confirmar-senha">Confirmar Senha</label>
+          <input type="password" id="registro-confirmar-senha" name="confirmarSenha" placeholder="Confirme sua senha" required />
+        </div>
+        <button type="submit" class="auth-button">
+          <i class="fas fa-user-plus"></i> Registrar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+/* Estilos para a página de autenticação */
+.auth-container {
+  max-width: 500px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  min-height: 620px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header .logo-icon {
+  font-size: 48px;
+  color: #4F46E5;
+  margin-bottom: 15px;
+}
+
+.auth-header h1 {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+.auth-header p {
+  color: #666;
+  margin: 0;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: #4F46E5;
+  border-bottom: 2px solid #4F46E5;
+}
+
+.auth-form-container {
+  position: relative;
+  min-height: 300px;
+}
+
+.auth-form {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  width: 100%;
+}
+
+.auth-form.active {
+  display: block;
+  opacity: 1;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #4F46E5;
+  outline: none;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #3730a3;
+}
+
+.auth-button i {
+  font-size: 18px;
+}
+
+/* Mensagem de erro */
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.error-message.visible {
+  display: block;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .auth-container {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .auth-header .logo-icon {
+    font-size: 36px;
+  }
+  
+  .auth-header h1 {
+    font-size: 24px;
+  }
+  
+  .auth-header p {
+    font-size: 14px;
+  }
+}

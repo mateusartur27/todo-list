@@ -1,89 +1,384 @@
 // script.js
 const API = '/tarefas';
+
+// Função para exportar lista de tarefas
+async function exportarListaTarefas() {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('usuarioId');
+    const resp = await fetch(`${API}?userId=${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    });
+    const tarefas = await resp.json();
+    
+    // Criar o objeto Blob com os dados
+    const blob = new Blob([JSON.stringify(tarefas, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    
+    // Criar elemento de link para download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'minhas-tarefas.json';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Limpar
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    mostrarToast('Lista de tarefas exportada com sucesso!');
+  } catch (error) {
+    mostrarToast('Erro ao exportar lista de tarefas.', 'error');
+  }
+}
+
+// Adicionar evento ao botão de exportação
+document.getElementById('exportar-lista').addEventListener('click', exportarListaTarefas);
 let filtroAtual = 'all';
-let ordenacao = 'data'; // Opções: 'data' ou 'titulo'
+let ordenacao = 'criacao'; // Opções: 'data', 'titulo' ou 'criacao'
+let termoBusca = '';
+
+// Verifica autenticação
+function verificarAutenticacao() {
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken) {
+    // Redireciona para a página de login se não estiver autenticado
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+// Adiciona informações do usuário e botão de logout no cabeçalho
+function configurarCabecalho() {
+  const usuarioNome = localStorage.getItem('usuarioNome');
+  const header = document.querySelector('.header');
+  
+  // Cria o elemento de informações do usuário
+  const userInfo = document.createElement('div');
+  userInfo.className = 'user-info';
+  userInfo.innerHTML = `
+    <span>Olá, ${usuarioNome || 'Usuário'}</span>
+    <button id="btn-logout" class="btn-logout">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+  `;
+  
+  header.appendChild(userInfo);
+  
+  // Adiciona evento de logout
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('usuarioId');
+    localStorage.removeItem('usuarioNome');
+    window.location.href = 'login.html';
+  });
+}
+
+// Função para calcular estatísticas das tarefas
+function calcularEstatisticas(tarefas) {
+  const total = tarefas.length;
+  const concluidas = tarefas.filter(t => t.status === 'CONCLUIDA').length;
+  const pendentes = total - concluidas;
+  const percentualConcluidas = total > 0 ? Math.round((concluidas / total) * 100) : 0;
+  
+  return {
+    total,
+    concluidas,
+    pendentes,
+    percentualConcluidas
+  };
+}
+
+// Função para atualizar o resumo estatístico
+function atualizarResumoEstatistico(tarefas) {
+  const stats = calcularEstatisticas(tarefas);
+  const resumoContainer = document.getElementById('resumo-estatistico');
+  
+  resumoContainer.innerHTML = `
+    <div class="stats-item">
+      <i class="fas fa-tasks"></i>
+      <span>Total: ${stats.total}</span>
+    </div>
+    <div class="stats-item">
+      <i class="fas fa-check-circle"></i>
+      <span>Concluídas: ${stats.concluidas}</span>
+    </div>
+    <div class="stats-item">
+      <i class="fas fa-clock"></i>
+      <span>Pendentes: ${stats.pendentes}</span>
+    </div>
+    <div class="stats-item">
+      <i class="fas fa-percentage"></i>
+      <span>Progresso: ${stats.percentualConcluidas}%</span>
+    </div>
+  `;
+}
 
 async function carregarTarefas() {
-  const resp = await fetch(API);
+  const authToken = localStorage.getItem('authToken');
+  const userId = localStorage.getItem('usuarioId');
+  const resp = await fetch(`${API}?userId=${userId}`, {
+    headers: {
+      'Authorization': `Bearer ${authToken}`
+    }
+  });
   const tarefas = await resp.json();
   const ul = document.getElementById('lista-tarefas');
+  
+  // Atualiza o resumo estatístico
+  atualizarResumoEstatistico(tarefas);
   
   let tarefasFiltradas = filtrarTarefas(tarefas);
   tarefasFiltradas = ordenarTarefas(tarefasFiltradas);
   
   ul.innerHTML = tarefasFiltradas.map(t => `
-    <li class="${t.status === 'CONCLUIDA' ? 'completed' : ''}">
+    <li class="${t.status === 'CONCLUIDA' ? 'completed' : ''}" id="tarefa-${t.id}">
       <div class="task-content">
         <span class="task-title">${t.titulo}</span>
         <span class="task-description">${t.descricao}</span>
         <span class="task-date">${formatarData(t.dataVencimento)}</span>
-        <span class="task-status">${t.status === 'CONCLUIDA' ? '✓ Concluída' : '⌛ Pendente'}</span>
+        <span class="task-status">${t.status === 'CONCLUIDA' ? 'X Concluída' : '⌛ Pendente'}</span>
       </div>
       <div class="task-actions">
-        ${t.status !== 'CONCLUIDA' ? `<button onclick="concluir(${t.id})" title="Marcar como concluída"><i class="fas fa-check"></i></button>` : ''}
+        <button onclick="concluir(${t.id})" title="${t.status === 'CONCLUIDA' ? 'Desmarcar tarefa' : 'Marcar como concluída'}"><i class="fas ${t.status === 'CONCLUIDA' ? 'fa-times' : 'fa-check'}"></i></button>
         <button onclick="editar(${t.id})" title="Editar tarefa"><i class="fas fa-edit"></i></button>
         <button onclick="excluir(${t.id})" title="Excluir tarefa"><i class="fas fa-trash"></i></button>
       </div>
+      <form class="edit-form" style="display: none;">
+        <div class="input-group">
+          <div class="input-fields">
+            <input name="titulo" type="text" value="${t.titulo}" required />
+            <input name="descricao" type="text" value="${t.descricao}" required />
+            <input name="dataVencimento" type="date" value="${t.dataVencimento}" required />
+          </div>
+          <div class="input-group__buttons">
+            <button type="submit" class="input-group__button">
+              <i class="fas fa-save"></i>
+              Salvar
+            </button>
+            <button type="button" class="input-group__button cancel" onclick="cancelarEdicao(${t.id})">
+              <i class="fas fa-times"></i>
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </form>
     </li>
   `).join('');
 }
 
 function filtrarTarefas(tarefas) {
+  let tarefasFiltradas = tarefas;
+  
   switch(filtroAtual) {
     case 'concluida':
-      return tarefas.filter(t => t.status === 'CONCLUIDA');
+      tarefasFiltradas = tarefasFiltradas.filter(t => t.status === 'CONCLUIDA');
+      break;
     case 'pendente':
-      return tarefas.filter(t => t.status !== 'CONCLUIDA');
-    default:
-      return tarefas;
+      tarefasFiltradas = tarefasFiltradas.filter(t => t.status !== 'CONCLUIDA');
+      break;
   }
+  
+  if (termoBusca) {
+    const termo = termoBusca.toLowerCase();
+    const isDataCompleta = /^\d{2}\/\d{2}\/\d{4}$/.test(termoBusca);
+    
+    tarefasFiltradas = tarefasFiltradas.filter(t => 
+      t.titulo.toLowerCase().includes(termo) || 
+      t.descricao.toLowerCase().includes(termo) ||
+      (isDataCompleta && formatarData(t.dataVencimento).includes(termo))
+    );
+  }
+  
+  return tarefasFiltradas;
 }
 
+
+// Configurar máscara de data no campo de data de vencimento
+function configurarMascaraData(input) {
+  // intercepta Backspace sobre "/"
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Backspace') {
+      const pos = input.selectionStart;
+      const val = input.value;
+      if (pos > 0 && val[pos-1] === '/') {
+        e.preventDefault();
+        // remove a barra e o dígito antes dela
+        input.value = val.slice(0, pos-2) + val.slice(pos);
+        // reposiciona o caret
+        input.setSelectionRange(pos-2, pos-2);
+      }
+    }
+  });
+
+  // reaplica máscara a cada input
+  input.addEventListener('input', () => aplicarMascaraData(input));
+}
+
+// Configuração do flatpickr para formulário de adição
+const novoDate = document.querySelector('#nova-tarefa input[name="dataVencimento"]');
+flatpickr(novoDate, {
+  locale: "pt",
+  dateFormat: "d/m/Y",
+  allowInput: true,
+  clickOpens: true,
+  defaultDate: null,
+  onChange: function([date], dateStr, instance) {
+    instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
+  }
+});
 
 document.getElementById('nova-tarefa')
   .addEventListener('submit', async e => {
     e.preventDefault();
     const title = e.target.titulo.value;
     const desc = e.target.descricao.value;
-    const data = e.target.dataVencimento.value;
+    const dataInput = e.target.dataVencimento;
+    const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
-    await fetch(API, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-        titulo: title,
-        descricao: desc,
-        dataVencimento: data
-      })
-    });
-    e.target.reset();
-    carregarTarefas();
+    try {
+      const userId = localStorage.getItem('usuarioId');
+      const response = await fetch(`${API}?userId=${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({
+          titulo: title,
+          descricao: desc,
+          dataVencimento: data,
+          status: 'PENDENTE'
+        })
+      });
+      
+      if (response.ok) {
+        mostrarToast('Tarefa adicionada com sucesso!');
+        e.target.reset();
+        carregarTarefas();
+        atualizarResumoEstatistico();
+      } else {
+        mostrarToast('Erro ao adicionar tarefa.', 'error');
+      }
+    } catch (error) {
+      mostrarToast('Erro ao adicionar tarefa.', 'error');
+    }
   });
 
 async function concluir(id) {
-  await fetch(`${API}/${id}/concluir`, { method: 'PATCH' });
-  carregarTarefas();
+  const li = document.getElementById(`tarefa-${id}`);
+  const isCompleted = li.classList.contains('completed');
+  const userId = localStorage.getItem('usuarioId');
+  const response = await fetch(`${API}/${id}/${isCompleted ? 'desmarcar' : 'concluir'}?userId=${userId}`, { 
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    }
+  });
+  if (response.ok) {
+    const tarefa = await response.json();
+    li.classList.toggle('completed');
+    li.querySelector('.task-status').textContent = tarefa.status === 'CONCLUIDA' ? 'X Concluída' : '⌛ Pendente';
+    li.querySelector('button[title]').title = tarefa.status === 'CONCLUIDA' ? 'Desmarcar tarefa' : 'Marcar como concluída';
+    li.querySelector('button[title] i').className = `fas ${tarefa.status === 'CONCLUIDA' ? 'fa-times' : 'fa-check'}`;
+    mostrarToast(isCompleted ? 'Tarefa desmarcada com sucesso!' : 'Tarefa concluída com sucesso!');
+    carregarTarefas();
+    atualizarResumoEstatistico();
+  } else {
+    mostrarToast('Erro ao atualizar o status da tarefa.');
+  }
 }
 
-async function editar(id) {
-  const novoTitulo = prompt('Novo título:');
-  if (!novoTitulo) return;
-  const novaDesc = prompt('Nova descrição:');
-  if (!novaDesc) return;
-  const novaData = prompt('Nova data de vencimento (DD/MM/AAAA):');
-  if (!novaData) return;
+function cancelarEdicao(id) {
+  const li = document.getElementById(`tarefa-${id}`);
+  const taskContent = li.querySelector('.task-content');
+  const editForm = li.querySelector('.edit-form');
+  const taskActions = li.querySelector('.task-actions');
   
-  await fetch(`${API}/${id}`, {
-    method: 'PUT',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      titulo: novoTitulo,
-      descricao: novaDesc,
-      dataVencimento: formatarDataParaAPI(novaData)
-    })
-  });
-  carregarTarefas();
+  taskContent.style.display = 'block';
+  taskActions.style.display = 'flex';
+  editForm.style.display = 'none';
 }
+
+function editar(id) {
+  const li = document.getElementById(`tarefa-${id}`);
+  const taskContent = li.querySelector('.task-content');
+  const editForm = li.querySelector('.edit-form');
+  const taskActions = li.querySelector('.task-actions');
+  
+  taskContent.style.display = 'none';
+  taskActions.style.display = 'none';
+  editForm.style.display = 'block';
+  
+  // Preenche os campos do formulário com os valores atuais
+  const editTitle = editForm.querySelector('input[name="titulo"]');
+  const editDescription = editForm.querySelector('input[name="descricao"]');
+// Remove duplicate declaration since editDate is already declared above
+  
+  const currentTitle = li.querySelector('.task-title').textContent;
+  const currentDescription = li.querySelector('.task-description').textContent;
+// Remove this line since dataOriginal is declared later
+  
+  editTitle.value = currentTitle;
+  editDescription.value = currentDescription;
+  
+  const editDate = editForm.querySelector('input[name="dataVencimento"]');
+  const dataOriginal = li.querySelector('.task-date').textContent;
+  
+  // Configura o valor inicial do campo de data no formato esperado pelo Flatpickr
+  if(dataOriginal && dataOriginal !== 'Sem data') {
+    editDate.value = dataOriginal;
+    editDate.setAttribute('data-valor-api', formatarDataParaAPI(dataOriginal));
+  }
+  
+  configurarMascaraData(editDate);
+  flatpickr(editDate, {
+    locale: "pt",
+    dateFormat: "d/m/Y",
+    allowInput: true,
+    clickOpens: true,
+    defaultDate: dataOriginal && dataOriginal !== 'Sem data' ? dataOriginal : null,
+    onChange: function([date], dateStr, instance) {
+      instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
+    }
+  });
+  
+  editForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const dataInput = editForm.querySelector('input[name="dataVencimento"]');
+    const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
+    
+    const userId = localStorage.getItem('usuarioId');
+    await fetch(`${API}/${id}?userId=${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      },
+      body: JSON.stringify({
+        titulo: formData.get('titulo'),
+        descricao: formData.get('descricao'),
+        dataVencimento: data
+      })
+    });
+    
+    taskContent.style.display = 'block';
+    taskActions.style.display = 'flex';
+    editForm.style.display = 'none';
+    carregarTarefas();
+    mostrarToast('Tarefa editada com sucesso!');
+  };
+}
+
+// Configurar campo de busca
+document.querySelector('.search-input').addEventListener('input', (e) => {
+  termoBusca = e.target.value;
+  carregarTarefas();
+});
 
 // Configurar os botões de filtro
 document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -98,29 +393,127 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // Funções auxiliares
 function formatarData(data) {
   if (!data) return 'Sem data';
-  return new Date(data).toLocaleDateString('pt-BR');
+  const date = new Date(data);
+  // Ajuste para evitar problemas de fuso horário
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  return date.toLocaleDateString('pt-BR');
 }
 
 function formatarDataParaAPI(data) {
-  if (!data) return null;
+  if (!data) {
+    const hoje = new Date();
+    return hoje.toISOString().split('T')[0];
+  }
   const [dia, mes, ano] = data.split('/');
+  // Garante que a data seja formatada corretamente para o backend
   return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+}
+
+function aplicarMascaraData(input) {
+  let valor = input.value.replace(/\D/g, '');
+  if (valor.length > 8) valor = valor.slice(0, 8);
+  
+  if (valor.length >= 2) {
+    valor = valor.slice(0, 2) + '/' + valor.slice(2);
+  }
+  if (valor.length >= 5) {
+    valor = valor.slice(0, 5) + '/' + valor.slice(5);
+  }
+  
+  input.value = valor;
+  
+  if (valor.length === 10) {
+    const [dia, mes, ano] = valor.split('/');
+    input.setAttribute('data-valor-api', `${ano}-${mes}-${dia}`);
+  }
 }
 
 function ordenarTarefas(tarefas) {
   return tarefas.sort((a, b) => {
     if (ordenacao === 'data') {
       return new Date(a.dataVencimento) - new Date(b.dataVencimento);
+    } else if (ordenacao === 'titulo') {
+      // Extrai números do início dos títulos para comparação numérica
+      const numA = parseInt(a.titulo.match(/^\d+/)?.[0] || '0');
+      const numB = parseInt(b.titulo.match(/^\d+/)?.[0] || '0');
+      
+      // Se ambos títulos começam com números, compara numericamente
+      if (!isNaN(numA) && !isNaN(numB) && numA !== numB) {
+        return numA - numB;
+      }
+      
+      // Caso contrário, compara alfabeticamente
+      return a.titulo.localeCompare(b.titulo);
     }
-    return a.titulo.localeCompare(b.titulo);
+    return a.id - b.id;
+  });
+}
+
+function mostrarToast(mensagem, tipo = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.textContent = mensagem;
+  
+  const container = document.getElementById('toast-container');
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.3s ease-out forwards';
+    setTimeout(() => container.removeChild(toast), 300);
+  }, 3000);
+}
+
+function mostrarModalConfirmacao(id) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <h2>Confirmar Exclusão</h2>
+    <p>Tem certeza que deseja excluir esta tarefa?</p>
+    <div class="modal-buttons">
+      <button class="modal-button cancel">Cancelar</button>
+      <button class="modal-button confirm">Excluir</button>
+    </div>
+  `;
+  
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  
+  return new Promise((resolve) => {
+    modal.querySelector('.modal-button.cancel').onclick = () => {
+      document.body.removeChild(overlay);
+      resolve(false);
+    };
+    
+    modal.querySelector('.modal-button.confirm').onclick = () => {
+      document.body.removeChild(overlay);
+      resolve(true);
+    };
   });
 }
 
 async function excluir(id) {
-  if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return;
-  await fetch(`${API}/${id}`, { method: 'DELETE' });
-  mostrarToast('Tarefa excluída com sucesso!');
-  carregarTarefas();
+  const confirmar = await mostrarModalConfirmacao(id);
+  if (!confirmar) return;
+  
+  const userId = localStorage.getItem('usuarioId');
+  await fetch(`${API}/${id}?userId=${userId}`, { 
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    }
+  });
+  const elementoTarefa = document.getElementById(`tarefa-${id}`);
+  elementoTarefa.style.animation = 'slideOut 0.3s ease-out forwards';
+  
+  setTimeout(() => {
+    elementoTarefa.remove();
+    mostrarToast('Tarefa excluída com sucesso!');
+    carregarTarefas();
+    atualizarResumoEstatistico();
+  }, 300);
 }
 
 // Configurar botão de ordenação
@@ -129,4 +522,22 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
   carregarTarefas();
 });
 
-window.onload = carregarTarefas;
+window.onload = function() {
+  if (verificarAutenticacao()) {
+    configurarCabecalho();
+    carregarTarefas();
+  }
+};
+
+// Configuração do flatpickr
+flatpickr("input[name='dataVencimento']", {
+  locale: "pt",
+  dateFormat: "d/m/Y",
+  allowInput: true,
+  clickOpens: true,
+  defaultDate: null,
+  onChange: function([date], dateStr, instance) {
+    instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
+  }
+});
+

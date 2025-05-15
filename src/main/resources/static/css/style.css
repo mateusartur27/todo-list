@@ -1,27 +1,62 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* Estilos gerais */
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #4F46E5;
 }
 
 .container {
-    text-align: center;
-    padding: 2rem;
-    border-radius: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    max-width: 600px;
-    width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o cabeçalho com informações do usuário */
+.header {
+  position: relative;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.user-info span {
+  font-weight: 500;
+  color: #333;
+}
+
+.btn-logout {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #d32f2f;
+}
+
+.btn-logout i {
+  font-size: 16px;
 }
 
 .header {
@@ -54,6 +89,8 @@ p {
 .input-group {
     display: flex;
     gap: 0.75rem;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .input-fields {
@@ -61,6 +98,7 @@ p {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    max-width: 70%;
 }
 
 .input-group input {
@@ -89,17 +127,75 @@ p {
     align-items: center;
     gap: 0.5rem;
     transition: background-color 0.3s ease;
+    margin-left: auto;
 }
 
 .input-group button:hover {
     background-color: #3730a3;
 }
 
+.task-list li .input-group__button {
+    padding: 0.75rem 1.5rem;
+    background-color: #4F46E5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    margin-left: 4rem;
+  }
+  
+  .task-list li .input-group__button.cancel {
+    background-color: #fff;
+    color: #4F46E5;
+    border: 1px solid #4F46E5;
+    margin-top: 0.5rem;
+    margin-left: auto;
+  }
+  
+  .task-list li .input-group__button:hover {
+    background-color: #3730a3;
+    color: #fff;
+  }
+  
+  .task-list li .input-group__button.cancel:hover {
+    background-color: #f3f4f6;
+    color: #4F46E5;
+  }
+  
+
 .filter-buttons {
     display: flex;
     gap: 0.5rem;
     justify-content: center;
     margin-bottom: 2rem;
+}
+
+.export-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #4F46E5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+}
+
+.export-button:hover {
+    background-color: #3730a3;
 }
 
 .filter-btn {
@@ -172,10 +268,13 @@ p {
 .search-container {
   position: relative;
   margin-bottom: 1.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-input {
-  width: 100%;
+  width: 70%; /* Ajuste a largura conforme necessário */
   padding: 0.75rem 2.5rem 0.75rem 1rem;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
@@ -247,4 +346,174 @@ p {
     text-decoration: line-through;
     color: #9ca3af;
 }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal h2 {
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.modal p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-button.confirm {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+}
+
+.modal-button.confirm:hover {
+    background-color: #b91c1c;
+}
+
+.modal-button.cancel {
+    background-color: #e5e7eb;
+    color: #4b5563;
+    border: none;
+}
+
+.modal-button.cancel:hover {
+    background-color: #d1d5db;
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+  
+/* 1) Fundo geral da lista */
+.flatpickr-calendar .flatpickr-monthDropdown-months {
+    background-color: #ffffff;  /* cor de fundo da lista */
+}
+  
+/* 2) Itens (meses) */
+.flatpickr-calendar .flatpickr-monthDropdown-months option {
+    color:            #1f2937;  /* cor do texto */
+    background-color: #ffffff;  /* cor de fundo padrão */
+}
+  
+
+  
+.sort-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #4F46E5;
+  background: transparent;
+  color: #4F46E5;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.sort-select:hover {
+  background-color: #4F46E5;
+  color: #fff;
+}
+
+.sort-select option {
+  background-color: #ffffff;
+  color: #1f2937;
+  padding: 0.5rem;
+}
+
+.sort-select option:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+  
+
+  
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group button {
+    width: 100%;
+  }
+
+  .task-list li {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-actions {
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+
+  .input-group input {
+    font-size: 0.9rem;
+  }
+
+  .input-group button {
+    font-size: 0.9rem;
+  }
+
+  .task-title {
+    font-size: 1rem;
+  }
+
+  .task-description {
+    font-size: 0.8rem;
+  }
+}
+  
+
   
