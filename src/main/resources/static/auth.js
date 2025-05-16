@@ -127,13 +127,3 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
     mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
   }
 });
-
-// Verifica se o usuário já está autenticado ao carregar a página
-window.addEventListener('DOMContentLoaded', async () => {
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  
-  if (session) {
-    // Se já estiver autenticado, redireciona para a página principal
-    window.location.href = 'index.html';
-  }
-});

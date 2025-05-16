@@ -4,8 +4,12 @@ const API = '/tarefas';
 // Função para exportar lista de tarefas
 async function exportarListaTarefas() {
   try {
-    const authToken = localStorage.getItem('authToken');
-    const userId = localStorage.getItem('usuarioId');
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      mostrarToast('Usuário não autenticado.', 'error');
+      return;
+    }
+    const userId = session.user.id;
     const resp = await fetch(`${API}?userId=${userId}`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
@@ -40,20 +44,10 @@ let filtroAtual = 'all';
 let ordenacao = 'criacao'; // Opções: 'data', 'titulo' ou 'criacao'
 let termoBusca = '';
 
-// Verifica autenticação
-function verificarAutenticacao() {
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    // Redireciona para a página de login se não estiver autenticado
-    window.location.href = 'login.html';
-    return false;
-  }
-  return true;
-}
-
 // Adiciona informações do usuário e botão de logout no cabeçalho
-function configurarCabecalho() {
-  const usuarioNome = localStorage.getItem('usuarioNome');
+async function configurarCabecalho() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  const usuarioNome = user ? user.user_metadata.nome || user.email : 'Usuário';
   const header = document.querySelector('.header');
   
   // Cria o elemento de informações do usuário
@@ -70,9 +64,8 @@ function configurarCabecalho() {
   
   // Adiciona evento de logout
   document.getElementById('btn-logout').addEventListener('click', () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('usuarioId');
-    localStorage.removeItem('usuarioNome');
+    await supabaseClient.auth.signOut();
+    localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
     window.location.href = 'login.html';
   });
 }
@@ -117,9 +110,12 @@ function atualizarResumoEstatistico(tarefas) {
   `;
 }
 
-async function carregarTarefas() {
-  const authToken = localStorage.getItem('authToken');
-  const userId = localStorage.getItem('usuarioId');
+async function carregarTarefas(userId) {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) {
+    mostrarToast('Usuário não autenticado.', 'error');
+    return;
+  }
   const resp = await fetch(`${API}?userId=${userId}`, {
     headers: {
       'Authorization': `Bearer ${authToken}`
@@ -240,7 +236,12 @@ document.getElementById('nova-tarefa')
     const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
     try {
-      const userId = localStorage.getItem('usuarioId');
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        mostrarToast('Usuário não autenticado.', 'error');
+        return;
+      }
+      const userId = session.user.id;
       const response = await fetch(`${API}?userId=${userId}`, {
         method: 'POST',
         headers: {
@@ -271,7 +272,12 @@ document.getElementById('nova-tarefa')
 async function concluir(id) {
   const li = document.getElementById(`tarefa-${id}`);
   const isCompleted = li.classList.contains('completed');
-  const userId = localStorage.getItem('usuarioId');
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) {
+    mostrarToast('Usuário não autenticado.', 'error');
+    return;
+  }
+  const userId = session.user.id;
   const response = await fetch(`${API}/${id}/${isCompleted ? 'desmarcar' : 'concluir'}?userId=${userId}`, { 
     method: 'PUT',
     headers: {
@@ -352,7 +358,12 @@ function editar(id) {
     const dataInput = editForm.querySelector('input[name="dataVencimento"]');
     const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
-    const userId = localStorage.getItem('usuarioId');
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      mostrarToast('Usuário não autenticado.', 'error');
+      return;
+    }
+    const userId = session.user.id;
     await fetch(`${API}/${id}?userId=${userId}`, {
       method: 'PUT',
       headers: {
@@ -498,7 +509,12 @@ async function excluir(id) {
   const confirmar = await mostrarModalConfirmacao(id);
   if (!confirmar) return;
   
-  const userId = localStorage.getItem('usuarioId');
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) {
+    mostrarToast('Usuário não autenticado.', 'error');
+    return;
+  }
+  const userId = session.user.id;
   await fetch(`${API}/${id}?userId=${userId}`, { 
     method: 'DELETE',
     headers: {
@@ -522,12 +538,27 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
   carregarTarefas();
 });
 
-window.onload = function() {
-  if (verificarAutenticacao()) {
-    configurarCabecalho();
-    carregarTarefas();
+// Verifica se o usuário está autenticado ao carregar a página e carrega as tarefas
+window.addEventListener('DOMContentLoaded', async () => {
+  // Verifica se o usuário está autenticado com Supabase
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    // Se não houver sessão, redireciona para a página de login
+    window.location.href = 'login.html';
+    return;
   }
-};
+
+  // Obtém o ID do usuário da sessão Supabase
+  const userId = session.user.id;
+  console.log('Usuário autenticado com ID:', userId);
+
+  // Configura o cabeçalho com as informações do usuário autenticado
+  configurarCabecalho();
+
+  // Carregar tarefas associadas a este usuário
+  carregarTarefas(userId);
+});
 
 // Configuração do flatpickr
 flatpickr("input[name='dataVencimento']", {
