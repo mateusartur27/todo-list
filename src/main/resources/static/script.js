@@ -539,6 +539,12 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
 
 // Monitora as mudanças no estado de autenticação do Supabase
 supabaseClient.auth.onAuthStateChange((event, session) => {
+  // Ignorar o evento INITIAL_SESSION
+  if (event === 'INITIAL_SESSION') {
+    console.log('INITIAL_SESSION event ignored');
+    return;
+  }
+
   console.log('Auth state change:', event, session);
   if (session) {
     // Usuário autenticado
