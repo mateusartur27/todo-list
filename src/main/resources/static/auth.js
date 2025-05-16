@@ -1,5 +1,10 @@
 // auth.js
 
+const supabaseClient = supabase.createClient(
+  'https://ymegzjtafckofamnhufx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltZWd6anRhZmNrb2ZhbW5odWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NjAwNjAsImV4cCI6MjA2MTUzNjA2MH0.qckDo6a2cri9EtMJZp5LeeZzpwueaxRguAcoPgscD7s'
+);
+
 // Função para mostrar mensagens de toast
 function mostrarToast(mensagem, tipo = 'success') {
   const toast = document.createElement('div');
@@ -59,7 +64,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   try {
     console.log('Enviando dados de login', { email });
     
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password: senha
     });
@@ -99,7 +104,7 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
   try {
     console.log('Enviando dados de registro');
     
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
       email,
       password: senha,
       options: {
@@ -125,7 +130,7 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
 
 // Verifica se o usuário já está autenticado ao carregar a página
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   
   if (session) {
     // Se já estiver autenticado, redireciona para a página principal
