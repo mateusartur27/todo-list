@@ -64,7 +64,7 @@ async function configurarCabecalho() {
   header.appendChild(userInfo);
   
   // Adiciona evento de logout
-  document.getElementById('btn-logout').addEventListener('click', () => {
+  document.getElementById('btn-logout').addEventListener('click', async () => {
     await supabaseClient.auth.signOut();
     localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
     window.location.href = 'login.html';
