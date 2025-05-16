@@ -103,6 +103,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         console.error('Erro na resposta:', text);
         mostrarToast('Erro ao realizar login. Verifique o servidor.', 'error');
       }
+    }
   } catch (error) {
     mostrarToast('Erro ao realizar login. Tente novamente.', 'error');
     console.error('Erro de login:', error);
