@@ -52,15 +52,21 @@ function validarFormularioRegistro(form) {
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   
+  console.log('Você chamar signIn'); // Log ANTES da chamada de autenticação
+  
   const email = e.target.email.value;
   const senha = e.target.senha.value;
   
   try {
+    console.log('SIGNIN', { email, senha }); // Log dos dados de autenticação
+    
     const response = await fetch(`${API_AUTH}/login`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, senha })
     });
+    
+    console.log('DEPOIS', { status: response.status }); // Log DEPOIS da chamada de autenticação
     
     if (response.ok) {
       const data = await response.json();
