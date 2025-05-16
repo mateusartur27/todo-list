@@ -150,6 +150,9 @@
     margin: 20px;
     padding: 20px;
     min-height: auto;
+    width: auto;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   
   .auth-header .logo-icon {
@@ -171,6 +174,11 @@
   .form-group input {
     padding: 12px;
     font-size: 16px; /* Aumenta o tamanho da fonte para melhor legibilidade em dispositivos móveis */
+  }
+  
+  .auth-form {
+    width: 100%;
+    position: relative;
   }
   
   .auth-button {
