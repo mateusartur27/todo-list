@@ -323,11 +323,9 @@ function editar(id) {
   // Preenche os campos do formulário com os valores atuais
   const editTitle = editForm.querySelector('input[name="titulo"]');
   const editDescription = editForm.querySelector('input[name="descricao"]');
-// Remove duplicate declaration since editDate is already declared above
   
   const currentTitle = li.querySelector('.task-title').textContent;
   const currentDescription = li.querySelector('.task-description').textContent;
-// Remove this line since dataOriginal is declared later
   
   editTitle.value = currentTitle;
   editDescription.value = currentDescription;
@@ -569,4 +567,21 @@ flatpickr("input[name='dataVencimento']", {
     instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
   }
 });
+
+// Verifica o estado de autenticação inicial ao carregar a página
+(async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session) {
+    const userId = session.user.id;
+    console.log('Usuário autenticado na carga inicial com ID:', userId);
+    configurarCabecalho();
+    carregarTarefas(userId);
+  } else {
+    console.log('Usuário desautenticado na carga inicial');
+    // Redireciona para a página de login se não estiver na página de login
+    if (window.location.pathname !== '/login.html') {
+      window.location.href = 'login.html';
+    }
+  }
+})();
 
