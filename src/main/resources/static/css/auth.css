@@ -89,6 +89,7 @@
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -138,6 +139,7 @@
   .auth-container {
     margin: 20px;
     padding: 20px;
+    min-height: auto;
   }
   
   .auth-header .logo-icon {
@@ -150,5 +152,19 @@
   
   .auth-header p {
     font-size: 14px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    padding: 12px;
+    font-size: 16px; /* Aumenta o tamanho da fonte para melhor legibilidade em dispositivos móveis */
+  }
+  
+  .auth-button {
+    padding: 14px;
+    font-size: 16px;
   }
 }

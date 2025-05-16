@@ -101,6 +101,24 @@ p {
     max-width: 70%;
 }
 
+/* Regras responsivas para dispositivos móveis */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .input-fields {
+        max-width: 100%;
+    }
+    
+    .input-group button {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+    }
+}
+
 .input-group input {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -153,6 +171,34 @@ p {
     margin-left: 4rem;
   }
   
+  .edit-form {
+    margin-top: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .edit-form .input-fields {
+        max-width: 100%;
+    }
+    
+    .edit-form .input-group__buttons {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .edit-form .input-group__button {
+        margin-left: 0 !important;
+        width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .task-list li .input-group__button {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  
   .task-list li .input-group__button.cancel {
     background-color: #fff;
     color: #4F46E5;
@@ -177,6 +223,28 @@ p {
     gap: 0.5rem;
     justify-content: center;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .stats-container {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    .stats-item {
+        width: 45%;
+        text-align: center;
+    }
 }
 
 .export-button {
@@ -230,35 +298,93 @@ p {
     background-color: #f9fafb;
     border-radius: 8px;
     transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .task-list li {
+        padding: 0.75rem;
+    }
 }
 
 .task-content {
     flex: 1;
     margin-right: 1rem;
+    margin-bottom: 1rem;
 }
 
 .task-title {
     display: block;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
 }
 
 .task-description {
     display: block;
     font-size: 0.9rem;
     color: #6b7280;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+.task-date {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: #4b5563;
+    background-color: #e5e7eb;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
 }
 
 .task-status {
     font-size: 0.8rem;
     color: #4F46E5;
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background-color: #e5e7eb;
+}
+
+@media (max-width: 768px) {
+    .task-date, .task-status {
+        display: block;
+        margin-bottom: 0.5rem;
+        width: fit-content;
+    }
 }
 
 .task-actions {
     display: flex;
     gap: 0.5rem;
+}
+
+.task-actions button {
+    background-color: #f3f4f6;
+    border: none;
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .task-actions {
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .task-actions button {
+        flex: 1;
+    }
 }
 
 .task-list li:hover {
@@ -271,6 +397,7 @@ p {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
 }
 
 .search-input {
@@ -280,6 +407,7 @@ p {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -465,6 +593,27 @@ p {
 .sort-select option:hover {
   background-color: #f3f4f6;
   color: #1f2937;
+}
+
+@media (max-width: 768px) {
+    .sort-select {
+        width: 100%;
+        margin: 0.5rem 0;
+        order: -1;
+    }
+    
+    .filter-buttons {
+        flex-direction: column;
+    }
+    
+    .filter-btn {
+        width: 100%;
+    }
+    
+    .export-button {
+        width: 100%;
+        margin: 0.5rem 0 0 0;
+    }
 }
   
 
