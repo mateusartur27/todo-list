@@ -74,14 +74,13 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     // O Supabase já gerencia o token de sessão automaticamente
     const { user, session } = data;
     
-    // Armazena informações adicionais do usuário se necessário
+    // Armazena informações adicionais do usuário e o token de autenticação
     localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
+    localStorage.setItem('authToken', session.access_token);
     
     mostrarToast('Login realizado com sucesso!');
     // Redireciona para a página principal após o login
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1000);
+    window.location.href = 'index.html';
     
   } catch (error) {
     console.error('Erro de login:', error.message);

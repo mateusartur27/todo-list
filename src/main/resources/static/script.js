@@ -10,11 +10,12 @@ async function exportarListaTarefas() {
       return;
     }
     const userId = session.user.id;
-    const resp = await fetch(`${API}?userId=${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`
-      }
-    });
+  const authToken = localStorage.getItem('authToken');
+  const resp = await fetch(`${API}?userId=${userId}`, {
+    headers: {
+      'Authorization': `Bearer ${authToken}`
+    }
+  });
     const tarefas = await resp.json();
     
     // Criar o objeto Blob com os dados
@@ -538,26 +539,23 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
   carregarTarefas();
 });
 
-// Verifica se o usuário está autenticado ao carregar a página e carrega as tarefas
-window.addEventListener('DOMContentLoaded', async () => {
-  // Verifica se o usuário está autenticado com Supabase
-  const { data: { session } } = await supabaseClient.auth.getSession();
-
-  if (!session) {
-    // Se não houver sessão, redireciona para a página de login
-    window.location.href = 'login.html';
-    return;
+// Monitora as mudanças no estado de autenticação do Supabase
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  console.log('Auth state change:', event, session);
+  if (session) {
+    // Usuário autenticado
+    const userId = session.user.id;
+    console.log('Usuário autenticado com ID:', userId);
+    configurarCabecalho();
+    carregarTarefas(userId);
+  } else {
+    // Usuário desautenticado
+    console.log('Usuário desautenticado');
+    // Redireciona para a página de login se não estiver na página de login
+    if (window.location.pathname !== '/login.html') {
+      window.location.href = 'login.html';
+    }
   }
-
-  // Obtém o ID do usuário da sessão Supabase
-  const userId = session.user.id;
-  console.log('Usuário autenticado com ID:', userId);
-
-  // Configura o cabeçalho com as informações do usuário autenticado
-  configurarCabecalho();
-
-  // Carregar tarefas associadas a este usuário
-  carregarTarefas(userId);
 });
 
 // Configuração do flatpickr
