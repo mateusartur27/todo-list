@@ -1,8 +1,6 @@
 // auth.js
-// Corrigindo o caminho da API para evitar erros 404
-const API_AUTH = 'api/usuarios';
 
-// Função para mostrar mensagens de toast (reutilizada do script.js)
+// Função para mostrar mensagens de toast
 function mostrarToast(mensagem, tipo = 'success') {
   const toast = document.createElement('div');
   toast.className = `toast ${tipo}`;
@@ -53,60 +51,36 @@ function validarFormularioRegistro(form) {
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  console.log('Iniciando login'); // Log ANTES da chamada de autenticação
+  console.log('Iniciando login');
   
   const email = e.target.email.value;
   const senha = e.target.senha.value;
   
   try {
-    console.log('Enviando dados de login', { email, senha }); // Log dos dados de autenticação
+    console.log('Enviando dados de login', { email });
     
-    // Corrigindo o endpoint para login
-    const response = await fetch(`${API_AUTH}/login`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ email, senha })
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: senha
     });
     
-    console.log('Resposta recebida', { status: response.status }); // Log DEPOIS da chamada de autenticação
+    if (error) throw error;
     
-    // Verificar o tipo de conteúdo da resposta
-    const contentType = response.headers.get('content-type');
+    // O Supabase já gerencia o token de sessão automaticamente
+    const { user, session } = data;
     
-    if (response.ok) {
-      // Verificar se a resposta é JSON antes de tentar processá-la
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        // Armazena o token e informações do usuário
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('usuarioId', data.id);
-        localStorage.setItem('usuarioNome', data.nome);
-        
-        mostrarToast('Login realizado com sucesso!');
-        // Redireciona para a página principal após o login
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1000);
-      } else {
-        // Se não for JSON, tratar como texto
-        const text = await response.text();
-        console.error('Resposta não é JSON:', text);
-        mostrarToast('Erro no formato da resposta do servidor', 'error');
-      }
-    } else {
-      // Tratar erro com verificação de tipo de conteúdo
-      if (contentType && contentType.includes('application/json')) {
-        const erro = await response.json();
-        mostrarToast(erro.mensagem || 'Credenciais inválidas', 'error');
-      } else {
-        const text = await response.text();
-        console.error('Erro na resposta:', text);
-        mostrarToast('Erro ao realizar login. Verifique o servidor.', 'error');
-      }
-    }
+    // Armazena informações adicionais do usuário se necessário
+    localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
+    
+    mostrarToast('Login realizado com sucesso!');
+    // Redireciona para a página principal após o login
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+    
   } catch (error) {
-    mostrarToast('Erro ao realizar login. Tente novamente.', 'error');
-    console.error('Erro de login:', error);
+    console.error('Erro de login:', error.message);
+    mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
   }
 });
 
@@ -125,46 +99,35 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
   try {
     console.log('Enviando dados de registro');
     
-    const response = await fetch(`${API_AUTH}/registro`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ nome, email, senha })
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: senha,
+      options: {
+        data: {
+          nome: nome
+        }
+      }
     });
     
-    console.log('Resposta recebida', { status: response.status });
+    if (error) throw error;
     
-    // Verificar o tipo de conteúdo da resposta
-    const contentType = response.headers.get('content-type');
+    mostrarToast('Registro realizado com sucesso! Verifique seu email para confirmar o cadastro.');
+    // Limpa o formulário
+    e.target.reset();
+    // Muda para a aba de login
+    document.querySelector('.tab-btn[data-tab="login"]').click();
     
-    if (response.ok) {
-      // Verificar se a resposta é JSON antes de tentar processá-la
-      mostrarToast('Registro realizado com sucesso! Faça login para continuar.');
-      // Limpa o formulário
-      e.target.reset();
-      // Muda para a aba de login
-      document.querySelector('.tab-btn[data-tab="login"]').click();
-    } else {
-      // Tratar erro com verificação de tipo de conteúdo
-      if (contentType && contentType.includes('application/json')) {
-        const erro = await response.json();
-        mostrarToast(erro.mensagem || 'Erro ao realizar registro', 'error');
-      } else {
-        const text = await response.text();
-        console.error('Erro na resposta de registro:', text);
-        mostrarToast('Erro ao realizar registro. Verifique o servidor.', 'error');
-      }
-    }
   } catch (error) {
-    mostrarToast('Erro ao realizar registro. Tente novamente.', 'error');
-    console.error('Erro de registro:', error);
+    console.error('Erro de registro:', error.message);
+    mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
   }
 });
 
 // Verifica se o usuário já está autenticado ao carregar a página
-window.addEventListener('DOMContentLoaded', () => {
-  const authToken = localStorage.getItem('authToken');
+window.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await supabase.auth.getSession();
   
-  if (authToken) {
+  if (session) {
     // Se já estiver autenticado, redireciona para a página principal
     window.location.href = 'index.html';
   }
