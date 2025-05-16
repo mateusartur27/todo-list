@@ -47,42 +47,20 @@ function validarFormularioRegistro(form) {
   return true;
 }
 
+import { supabase } from './supabaseClient.js';
+
 // Manipulador do formulário de login
-document.getElementById('login-form').addEventListener('submit', async (e) => {
+async function handleLogin(e) {
   e.preventDefault();
-  
   console.log('Iniciando login');
-  
-  const email = e.target.email.value;
-  const senha = e.target.senha.value;
-  
-  try {
-    console.log('Enviando dados de login', { email });
-    
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: senha
-    });
-    
-    if (error) throw error;
-    
-    // O Supabase já gerencia o token de sessão automaticamente
-    const { user, session } = data;
-    
-    // Armazena informações adicionais do usuário se necessário
-    localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
-    
-    mostrarToast('Login realizado com sucesso!');
-    // Redireciona para a página principal após o login
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1000);
-    
-  } catch (error) {
-    console.error('Erro de login:', error.message);
-    mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
-  }
-});
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-senha').value;
+  console.log('Enviando dados de login', { email, password });
+  const { data: session, error } = await supabase.auth.signInWithPassword({ email, password });
+  console.log('Resultado login:', { session, error });
+  if (error) mostrarToast(error.message, 'error');
+  else window.location.href = '/dashboard';
+}
 
 // Manipulador do formulário de registro
 document.getElementById('registro-form').addEventListener('submit', async (e) => {
