@@ -546,6 +546,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     console.log('Usuário autenticado com ID:', userId);
     configurarCabecalho();
     carregarTarefas(userId);
+    atualizarResumoEstatistico();
   } else {
     // Usuário desautenticado
     console.log('Usuário desautenticado');
