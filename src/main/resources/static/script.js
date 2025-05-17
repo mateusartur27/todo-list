@@ -617,8 +617,8 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
     // Usuário autenticado
     if (session) {
-      if (verificacabecalho === false) return;
-        configurarCabecalho();
+      if (verificacabecalho === true) return;
+      configurarCabecalho();
       carregarTarefas();
       atualizarResumoEstatistico();
       console.log('Usuário autenticado com ID:', session.user.id);
