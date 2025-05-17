@@ -153,4 +153,6 @@ function inicializarFormularios() {
 }
 
 // Inicializa os formulários quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', inicializarFormularios);
+if (document.getElementById('login-form') || document.getElementById('registro-form')) {
+  document.addEventListener('DOMContentLoaded', inicializarFormularios);
+}
