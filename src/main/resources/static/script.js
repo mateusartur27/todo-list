@@ -619,6 +619,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
       if (verificacabecalho === false) {
         configurarCabecalho();
+        mostrarToast('Login realizado com sucesso!');
       }
       carregarTarefas();
       atualizarResumoEstatistico();

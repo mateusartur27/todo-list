@@ -94,7 +94,6 @@ function inicializarFormularios() {
       localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
       localStorage.setItem('authToken', session.access_token);
       
-      mostrarToast('Login realizado com sucesso!');
       // Redireciona para a página principal após o login
       window.location.href = 'index.html';
       
