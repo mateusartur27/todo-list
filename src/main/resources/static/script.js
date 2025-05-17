@@ -644,18 +644,5 @@ flatpickr("input[name='dataVencimento']", {
   }
 });
 
-// Verifica o estado de autenticação inicial ao carregar a página
-(async () => {
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) {
-    console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
-    carregarTarefas();
-  } else {
-    console.log('Usuário desautenticado na carga inicial');
-    // Redireciona para a página de login se não estiver na página de login
-    if (window.location.pathname !== '/login.html') {
-      window.location.href = 'login.html';
-    }
-  }
-})();
+
 
