@@ -52,13 +52,23 @@ let termoBusca = '';
 
 // Adiciona informações do usuário e botão de logout no cabeçalho
 async function configurarCabecalho() {
+  // Verifica se o elemento já existe
+  if (document.querySelector('.user-info')) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  const usuarioNome = user ? user.user_metadata.nome || user.email : 'Usuário';
   const header = document.querySelector('.header');
+  
+  if (!header) {
+    console.warn('Elemento header não encontrado');
+    return;
+  }
   
   // Cria o elemento de informações do usuário
   const userInfo = document.createElement('div');
   userInfo.className = 'user-info';
   userInfo.innerHTML = `
-    <span>Olá, Usuário</span>
+    <span>Olá, ${usuarioNome || 'Usuário'}</span>
     <button id="btn-logout" class="btn-logout">
       <i class="fas fa-sign-out-alt"></i> Sair
     </button>
@@ -69,7 +79,7 @@ async function configurarCabecalho() {
   // Adiciona evento de logout
   document.getElementById('btn-logout').addEventListener('click', async () => {
     await supabaseClient.auth.signOut();
-    localStorage.removeItem('usuarioNome');
+    localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
     window.location.href = 'login.html';
   });
 }
@@ -603,26 +613,20 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
 
 // Monitora as mudanças no estado de autenticação do Supabase
 supabaseClient.auth.onAuthStateChange((event, session) => {
-  // Ignorar o evento INITIAL_SESSION
-  if (event === 'INITIAL_SESSION') {
-    console.log('INITIAL_SESSION event ignored');
-    return;
-  }
-
-  console.log('Auth state change:', event, session);
-  if (session) {
+  if (event === 'SIGNED_IN') {
     // Usuário autenticado
     console.log('Usuário autenticado com ID:', session.user.id);
     configurarCabecalho();
     carregarTarefas();
     atualizarResumoEstatistico();
-  } else {
+  } else if (event === 'SIGNED_OUT') {
     // Usuário desautenticado
     console.log('Usuário desautenticado');
-    // Redireciona para a página de login se não estiver na página de login
-    if (window.location.pathname !== '/login.html') {
-      window.location.href = 'login.html';
-    }
+    // Remove o elemento de informações do usuário
+    const userInfo = document.querySelector('.user-info');
+    if (userInfo) userInfo.remove();
+    // Redireciona para a página de login
+    window.location.href = 'login.html';
   }
 });
 
