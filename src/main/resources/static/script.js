@@ -78,8 +78,18 @@ async function configurarCabecalho() {
 
 // Função para calcular estatísticas das tarefas
 function calcularEstatisticas(tarefas) {
+  if (!Array.isArray(tarefas)) {
+    console.error('Dados inválidos para cálculo de estatísticas:', tarefas);
+    return {
+      total: 0,
+      concluidas: 0,
+      pendentes: 0,
+      percentualConcluidas: 0
+    };
+  }
+
   const total = tarefas.length;
-  const concluidas = tarefas.filter(t => t.status === 'CONCLUIDA').length;
+  const concluidas = tarefas.filter(t => t && t.status === 'CONCLUIDA').length;
   const pendentes = total - concluidas;
   const percentualConcluidas = total > 0 ? Math.round((concluidas / total) * 100) : 0;
   
@@ -92,28 +102,53 @@ function calcularEstatisticas(tarefas) {
 }
 
 // Função para atualizar o resumo estatístico
-function atualizarResumoEstatistico(tarefas) {
-  const stats = calcularEstatisticas(tarefas);
-  const resumoContainer = document.getElementById('resumo-estatistico');
-  
-  resumoContainer.innerHTML = `
-    <div class="stats-item">
-      <i class="fas fa-tasks"></i>
-      <span>Total: ${stats.total}</span>
-    </div>
-    <div class="stats-item">
-      <i class="fas fa-check-circle"></i>
-      <span>Concluídas: ${stats.concluidas}</span>
-    </div>
-    <div class="stats-item">
-      <i class="fas fa-clock"></i>
-      <span>Pendentes: ${stats.pendentes}</span>
-    </div>
-    <div class="stats-item">
-      <i class="fas fa-percentage"></i>
-      <span>Progresso: ${stats.percentualConcluidas}%</span>
-    </div>
-  `;
+async function atualizarResumoEstatistico() {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      console.warn('Usuário não autenticado ao atualizar estatísticas');
+      return;
+    }
+    
+    const { data: tarefas, error } = await supabaseClient
+      .from('tarefas')
+      .select('*')
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error('Erro ao carregar tarefas para estatísticas:', error);
+      return;
+    }
+
+    const stats = calcularEstatisticas(tarefas);
+    const resumoContainer = document.getElementById('resumo-estatistico');
+    
+    if (!resumoContainer) {
+      console.warn('Container de resumo estatístico não encontrado');
+      return;
+    }
+
+    resumoContainer.innerHTML = `
+      <div class="stats-item">
+        <i class="fas fa-tasks"></i>
+        <span>Total: ${stats.total}</span>
+      </div>
+      <div class="stats-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Concluídas: ${stats.concluidas}</span>
+      </div>
+      <div class="stats-item">
+        <i class="fas fa-clock"></i>
+        <span>Pendentes: ${stats.pendentes}</span>
+      </div>
+      <div class="stats-item">
+        <i class="fas fa-percentage"></i>
+        <span>Progresso: ${stats.percentualConcluidas}%</span>
+      </div>
+    `;
+  } catch (error) {
+    console.error('Erro ao atualizar resumo estatístico:', error);
+  }
 }
 
 async function carregarTarefas(userId) {
