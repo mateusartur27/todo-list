@@ -649,7 +649,6 @@ flatpickr("input[name='dataVencimento']", {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
     console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
-    configurarCabecalho();
     carregarTarefas();
   } else {
     console.log('Usuário desautenticado na carga inicial');
