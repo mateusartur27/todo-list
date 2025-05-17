@@ -169,11 +169,27 @@ async function carregarTarefas() {
 
   const ul = document.getElementById('lista-tarefas');
   
-  // Atualiza o resumo estatístico
-  atualizarResumoEstatistico(tarefas);
+  // Garante que tarefas seja um array mesmo quando não há dados
+  const tarefasArray = Array.isArray(tarefas) ? tarefas : [];
   
-  let tarefasFiltradas = filtrarTarefas(tarefas);
+  // Atualiza o resumo estatístico
+  atualizarResumoEstatistico(tarefasArray);
+  
+  let tarefasFiltradas = filtrarTarefas(tarefasArray);
   tarefasFiltradas = ordenarTarefas(tarefasFiltradas);
+  
+  // Se não houver tarefas, exibe uma mensagem
+  if (tarefasArray.length === 0) {
+    ul.innerHTML = `
+      <li class="no-tasks">
+        <div class="task-content">
+          <span class="task-title">Nenhuma tarefa encontrada</span>
+          <span class="task-description">Comece adicionando uma nova tarefa!</span>
+        </div>
+      </li>
+    `;
+    return;
+  }
   
   ul.innerHTML = tarefasFiltradas.map(t => `
     <li class="${t.status === 'CONCLUIDA' ? 'completed' : ''}" id="tarefa-${t.id}">
