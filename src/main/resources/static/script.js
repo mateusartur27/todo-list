@@ -613,12 +613,14 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
 
 // Monitora as mudanças no estado de autenticação do Supabase
 supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN') {
+  if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
     // Usuário autenticado
-    console.log('Usuário autenticado com ID:', session.user.id);
-    configurarCabecalho();
-    carregarTarefas();
-    atualizarResumoEstatistico();
+    if (session) {
+      console.log('Usuário autenticado com ID:', session.user.id);
+      configurarCabecalho();
+      carregarTarefas();
+      atualizarResumoEstatistico();
+    }
   } else if (event === 'SIGNED_OUT') {
     // Usuário desautenticado
     console.log('Usuário desautenticado');
@@ -643,10 +645,18 @@ flatpickr("input[name='dataVencimento']", {
 });
 
 // Verifica o estado de autenticação inicial ao carregar a página
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN') {
+(async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session) {
+    console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
     configurarCabecalho();
     carregarTarefas();
+  } else {
+    console.log('Usuário desautenticado na carga inicial');
+    // Redireciona para a página de login se não estiver na página de login
+    if (window.location.pathname !== '/login.html') {
+      window.location.href = 'login.html';
+    }
   }
-});
+})();
 
