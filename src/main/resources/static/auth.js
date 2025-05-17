@@ -99,9 +99,8 @@ function inicializarFormularios() {
       window.location.href = 'index.html';
       
     } catch (error) {
-      mostrarToast('Erro ao realizar login. Tente novamente.');
       console.error('Erro de login:', error.message);
-      mostrarToast('Erro ao realizar login. Tente novamente.');
+      mostrarToast('Erro ao realizar login.');
     }
     });
   } else {
