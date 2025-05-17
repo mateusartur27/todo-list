@@ -628,9 +628,6 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   } else if (event === 'SIGNED_OUT') {
     // Usuário desautenticado
     console.log('Usuário desautenticado');
-    // Remove o elemento de informações do usuário
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo) userInfo.remove();
     // Redireciona para a página de login
     window.location.href = 'login.html';
     verificacabecalho = false;
