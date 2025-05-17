@@ -296,7 +296,13 @@ flatpickr(novoDate, {
   }
 });
 
-document.getElementById('nova-tarefa')
+document.addEventListener('DOMContentLoaded', () => {
+  const loginSuccess = localStorage.getItem('loginSuccess');
+  if (loginSuccess) {
+    mostrarToast('Login realizado com sucesso!');
+    localStorage.removeItem('loginSuccess');
+  }
+});
   .addEventListener('submit', async e => {
     e.preventDefault();
     const title = e.target.titulo.value;
