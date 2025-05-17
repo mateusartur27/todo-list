@@ -311,7 +311,7 @@ document.getElementById('nova-tarefa')
             descricao: desc,
             dataVencimento: data,
             status: 'PENDENTE',
-            uid: userId
+            user_id: userId
           }
         ])
         .select();
@@ -431,7 +431,7 @@ function editar(id) {
         dataVencimento: data
       })
       .eq('id', id)
-      .eq('uid', userId);
+      .eq('user_id', userId);
 
     if (error) {
       mostrarToast('Erro ao editar tarefa.', 'error');
@@ -580,7 +580,7 @@ async function excluir(id) {
     .from('tarefas')
     .delete()
     .eq('id', id)
-    .eq('uid', userId);
+    .eq('user_id', userId);
 
   if (error) {
     mostrarToast('Erro ao excluir tarefa.', 'error');
