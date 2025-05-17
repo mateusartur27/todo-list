@@ -612,14 +612,17 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
 });
 
 // Monitora as mudanças no estado de autenticação do Supabase
+verificacabecalho = false;
 supabaseClient.auth.onAuthStateChange((event, session) => {
   if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
     // Usuário autenticado
     if (session) {
-      console.log('Usuário autenticado com ID:', session.user.id);
-      configurarCabecalho();
+      if (verificacabecalho === false) return;
+        configurarCabecalho();
       carregarTarefas();
       atualizarResumoEstatistico();
+      console.log('Usuário autenticado com ID:', session.user.id);
+      verificacabecalho = true;
     }
   } else if (event === 'SIGNED_OUT') {
     // Usuário desautenticado
@@ -629,6 +632,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (userInfo) userInfo.remove();
     // Redireciona para a página de login
     window.location.href = 'login.html';
+    verificacabecalho = false;
   }
 });
 
