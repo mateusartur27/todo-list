@@ -20,25 +20,31 @@ function mostrarToast(mensagem, tipo = 'success') {
   }, 3000);
 }
 
-// Alternar entre as abas de login e registro
-const tabButtons = document.querySelectorAll('.tab-btn');
-if (tabButtons.length > 0) {
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Remove a classe active de todos os botões e formulários
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-      
-      // Adiciona a classe active ao botão clicado e ao formulário correspondente
-      btn.classList.add('active');
-      const tabId = btn.dataset.tab;
-      const form = document.getElementById(`${tabId}-form`);
-      if (form) {
-        form.classList.add('active');
-      }
+// Função para inicializar os elementos da interface
+function inicializarInterface() {
+  // Alternar entre as abas de login e registro
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  if (tabButtons.length > 0) {
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove a classe active de todos os botões e formulários
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        
+        // Adiciona a classe active ao botão clicado e ao formulário correspondente
+        btn.classList.add('active');
+        const tabId = btn.dataset.tab;
+        const form = document.getElementById(`${tabId}-form`);
+        if (form) {
+          form.classList.add('active');
+        }
+      });
     });
-  });
+  }
 }
+
+// Aguarda o DOM estar completamente carregado antes de inicializar
+document.addEventListener('DOMContentLoaded', inicializarInterface);
 
 // Função para validar o formulário de registro
 function validarFormularioRegistro(form) {
@@ -58,10 +64,12 @@ function validarFormularioRegistro(form) {
   return true;
 }
 
-// Manipulador do formulário de login
-const loginForm = document.getElementById('login-form');
-if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
+// Função para inicializar os manipuladores de formulário
+function inicializarFormularios() {
+  // Manipulador do formulário de login
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     console.log('Iniciando login');
@@ -94,13 +102,15 @@ if (loginForm) {
       console.error('Erro de login:', error.message);
       mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
     }
-  });
-}
+    });
+  } else {
+    console.error('Formulário de login não encontrado');
+  }
 
-// Manipulador do formulário de registro
-const registroForm = document.getElementById('registro-form');
-if (registroForm) {
-  registroForm.addEventListener('submit', async (e) => {
+  // Manipulador do formulário de registro
+  const registroForm = document.getElementById('registro-form');
+  if (registroForm) {
+    registroForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     if (!validarFormularioRegistro(e.target)) {
@@ -136,5 +146,11 @@ if (registroForm) {
       console.error('Erro de registro:', error.message);
       mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
     }
-  });
+    });
+  } else {
+    console.error('Formulário de registro não encontrado');
+  }
 }
+
+// Inicializa os formulários quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', inicializarFormularios);
