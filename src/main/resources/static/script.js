@@ -151,7 +151,7 @@ async function atualizarResumoEstatistico() {
   }
 }
 
-async function carregarTarefas(userId) {
+async function carregarTarefas() {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     mostrarToast('Usuário não autenticado.', 'error');
@@ -160,7 +160,7 @@ async function carregarTarefas(userId) {
   const { data: tarefas, error } = await supabaseClient
     .from('tarefas')
     .select('*')
-    .eq('user_id', userId);
+    .eq('user_id', session.user.id);
 
   if (error) {
     mostrarToast('Erro ao carregar tarefas.', 'error');
@@ -598,10 +598,9 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   console.log('Auth state change:', event, session);
   if (session) {
     // Usuário autenticado
-    const userId = session.user.id;
-    console.log('Usuário autenticado com ID:', userId);
+    console.log('Usuário autenticado com ID:', session.user.id);
     configurarCabecalho();
-    carregarTarefas(userId);
+    carregarTarefas();
     atualizarResumoEstatistico();
   } else {
     // Usuário desautenticado
@@ -629,10 +628,9 @@ flatpickr("input[name='dataVencimento']", {
 (async () => {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
-    const userId = session.user.id;
-    console.log('Usuário autenticado na carga inicial com ID:', userId);
+    console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
     configurarCabecalho();
-    carregarTarefas(userId);
+    carregarTarefas();
   } else {
     console.log('Usuário desautenticado na carga inicial');
     // Redireciona para a página de login se não estiver na página de login
