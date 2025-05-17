@@ -50,17 +50,15 @@ let filtroAtual = 'all';
 let ordenacao = 'criacao'; // Opções: 'data', 'titulo' ou 'criacao'
 let termoBusca = '';
 
-// Remove a função configurarCabecalho que adicionava dinamicamente os elementos
+// Adiciona informações do usuário e botão de logout no cabeçalho
 async function configurarCabecalho() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  const usuarioNome = user ? user.user_metadata.nome || user.email : 'Usuário';
   const header = document.querySelector('.header');
   
   // Cria o elemento de informações do usuário
   const userInfo = document.createElement('div');
   userInfo.className = 'user-info';
   userInfo.innerHTML = `
-    <span>Olá, ${usuarioNome || 'Usuário'}</span>
+    <span>Olá, Usuário</span>
     <button id="btn-logout" class="btn-logout">
       <i class="fas fa-sign-out-alt"></i> Sair
     </button>
@@ -71,7 +69,7 @@ async function configurarCabecalho() {
   // Adiciona evento de logout
   document.getElementById('btn-logout').addEventListener('click', async () => {
     await supabaseClient.auth.signOut();
-    localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
+    localStorage.removeItem('usuarioNome');
     window.location.href = 'login.html';
   });
 }
@@ -647,43 +645,6 @@ flatpickr("input[name='dataVencimento']", {
     console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
     configurarCabecalho();
     carregarTarefas();
-  } else {
-    console.log('Usuário desautenticado na carga inicial');
-    // Redireciona para a página de login se não estiver na página de login
-    if (window.location.pathname !== '/login.html') {
-      window.location.href = 'login.html';
-    }
-  }
-})();
-
-
-// Adiciona lógica para exibir informações do usuário e botão de logout
-document.addEventListener('DOMContentLoaded', async () => {
-  const userInfoDiv = document.getElementById('user-info');
-  const greetingSpan = document.getElementById('greeting');
-  const logoutButton = document.getElementById('logout-button');
-
-  if (userInfoDiv && greetingSpan && logoutButton) {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    if (user) {
-      const usuarioNome = user.user_metadata.nome || user.email;
-      greetingSpan.textContent = `Olá, ${usuarioNome}`;
-      userInfoDiv.style.display = 'flex'; // Ou 'block', dependendo do layout desejado
-
-      logoutButton.addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        localStorage.removeItem('usuarioNome');
-        window.location.href = 'login.html';
-      });
-    } else {
-      userInfoDiv.style.display = 'none';
-    }
-  }
-
-  // Inicializa outras funcionalidades da página aqui, se necessário
-  carregarTarefas();
-  atualizarResumoEstatistico();
   } else {
     console.log('Usuário desautenticado na carga inicial');
     // Redireciona para a página de login se não estiver na página de login
