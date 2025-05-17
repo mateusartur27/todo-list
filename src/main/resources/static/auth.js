@@ -152,37 +152,7 @@ function inicializarFormularios() {
   }
 }
 
-// Função para configurar o cabeçalho do usuário
-function configurarCabecalho() {
-  const header = document.querySelector('.header');
-  // se já adicionou, não faz nada
-  if (header.querySelector('.user-info')) return;
-
-  const usuarioNome = localStorage.getItem('usuarioNome') || 'Usuário';
-  const userInfo = document.createElement('div');
-  userInfo.className = 'user-info';
-  userInfo.innerHTML = `
-    <span>Olá, ${usuarioNome}</span>
-    <button id="btn-logout" class="btn-logout">
-      <i class="fas fa-sign-out-alt"></i> Sair
-    </button>
-  `;
-  header.appendChild(userInfo);
-
-  document.getElementById('btn-logout').addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = 'login.html';
-  });
-}
-
 // Inicializa os formulários quando o DOM estiver carregado
 if (document.getElementById('login-form') || document.getElementById('registro-form')) {
-  document.addEventListener('DOMContentLoaded', () => {
-    inicializarFormularios();
-    
-    // Verifica se o usuário está autenticado e configura o cabeçalho
-    if (localStorage.getItem('authToken')) {
-      configurarCabecalho();
-    }
-  });
+  document.addEventListener('DOMContentLoaded', inicializarFormularios);
 }

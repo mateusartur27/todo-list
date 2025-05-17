@@ -50,7 +50,7 @@ let filtroAtual = 'all';
 let ordenacao = 'criacao'; // Opções: 'data', 'titulo' ou 'criacao'
 let termoBusca = '';
 
-// Adiciona informações do usuário e botão de logout no cabeçalho
+// Remove a função configurarCabecalho que adicionava dinamicamente os elementos
 async function configurarCabecalho() {
   const { data: { user } } = await supabaseClient.auth.getUser();
   const usuarioNome = user ? user.user_metadata.nome || user.email : 'Usuário';
@@ -647,6 +647,43 @@ flatpickr("input[name='dataVencimento']", {
     console.log('Usuário autenticado na carga inicial com ID:', session.user.id);
     configurarCabecalho();
     carregarTarefas();
+  } else {
+    console.log('Usuário desautenticado na carga inicial');
+    // Redireciona para a página de login se não estiver na página de login
+    if (window.location.pathname !== '/login.html') {
+      window.location.href = 'login.html';
+    }
+  }
+})();
+
+
+// Adiciona lógica para exibir informações do usuário e botão de logout
+document.addEventListener('DOMContentLoaded', async () => {
+  const userInfoDiv = document.getElementById('user-info');
+  const greetingSpan = document.getElementById('greeting');
+  const logoutButton = document.getElementById('logout-button');
+
+  if (userInfoDiv && greetingSpan && logoutButton) {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (user) {
+      const usuarioNome = user.user_metadata.nome || user.email;
+      greetingSpan.textContent = `Olá, ${usuarioNome}`;
+      userInfoDiv.style.display = 'flex'; // Ou 'block', dependendo do layout desejado
+
+      logoutButton.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        localStorage.removeItem('usuarioNome');
+        window.location.href = 'login.html';
+      });
+    } else {
+      userInfoDiv.style.display = 'none';
+    }
+  }
+
+  // Inicializa outras funcionalidades da página aqui, se necessário
+  carregarTarefas();
+  atualizarResumoEstatistico();
   } else {
     console.log('Usuário desautenticado na carga inicial');
     // Redireciona para a página de login se não estiver na página de login
