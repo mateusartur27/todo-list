@@ -93,14 +93,13 @@ function inicializarFormularios() {
       // Armazena informações adicionais do usuário e o token de autenticação
       localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
       localStorage.setItem('authToken', session.access_token);
-      localStorage.setItem('loginSuccess', 'true');
       
       mostrarToast('Login realizado com sucesso!');
       // Redireciona para a página principal após o login
       window.location.href = 'index.html';
       
     } catch (error) {
-      console.error('Erro de login: Credenciais de login inválidas', error.message);
+      console.error('Erro de login:', error.message);
       mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
     }
     });
