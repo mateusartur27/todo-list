@@ -11,10 +11,6 @@ async function exportarListaTarefas() {
     }
     const userId = session.user.id;
   const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    mostrarToast('Token de autenticação não encontrado.', 'error');
-    return;
-  }
   const resp = await fetch(`${API}?userId=${userId}`, {
     headers: {
       'Authorization': `Bearer ${authToken}`
@@ -115,16 +111,10 @@ function atualizarResumoEstatistico(tarefas) {
   `;
 }
 
-async function carregarTarefas() {
+async function carregarTarefas(userId) {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     mostrarToast('Usuário não autenticado.', 'error');
-    return;
-  }
-  const userId = session.user.id;
-  const authToken = localStorage.getItem('authToken');
-  if (!authToken) {
-    mostrarToast('Token de autenticação não encontrado.', 'error');
     return;
   }
   const resp = await fetch(`${API}?userId=${userId}`, {
@@ -134,9 +124,13 @@ async function carregarTarefas() {
   });
   const tarefas = await resp.json();
   const ul = document.getElementById('lista-tarefas');
+  
+  // Atualiza o resumo estatístico
   atualizarResumoEstatistico(tarefas);
+  
   let tarefasFiltradas = filtrarTarefas(tarefas);
   tarefasFiltradas = ordenarTarefas(tarefasFiltradas);
+  
   ul.innerHTML = tarefasFiltradas.map(t => `
     <li class="${t.status === 'CONCLUIDA' ? 'completed' : ''}" id="tarefa-${t.id}">
       <div class="task-content">
