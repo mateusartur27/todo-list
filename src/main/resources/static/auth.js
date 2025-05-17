@@ -1,6 +1,10 @@
 // auth.js
+gurei, para que 
+// Importar o Supabase
+const { createClient } = supabase;
 
-const supabaseClient = supabase.createClient(
+// Criar o cliente Supabase
+const supabaseClient = createClient(
   'https://ymegzjtafckofamnhufx.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltZWd6anRhZmNrb2ZhbW5odWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NjAwNjAsImV4cCI6MjA2MTUzNjA2MH0.qckDo6a2cri9EtMJZp5LeeZzpwueaxRguAcoPgscD7s'
 );
@@ -20,8 +24,12 @@ function mostrarToast(mensagem, tipo = 'success') {
   }, 3000);
 }
 
-// Alternar entre as abas de login e registro
-document.querySelectorAll('.tab-btn').forEach(btn => {
+// Garantir que o DOM está carregado
+document.addEventListener('DOMContentLoaded', () => {
+  // Alternar entre as abas de login e registro
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  if (tabButtons) {
+    tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     // Remove a classe active de todos os botões e formulários
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -31,7 +39,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     const tabId = btn.dataset.tab;
     document.getElementById(`${tabId}-form`).classList.add('active');
-  });
+        });
+  }
+});
+  }
+    });
+  }
 });
 
 // Função para validar o formulário de registro
@@ -53,7 +66,10 @@ function validarFormularioRegistro(form) {
 }
 
 // Formulário de Login
-document.getElementById('login-form').addEventListener('submit', async (e) => {
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = e.target.email.value;
   const senha = e.target.senha.value;
@@ -62,7 +78,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password: senha
-    });
+        });
+  }
+});
     
     if (error) throw error;
     
@@ -81,10 +99,15 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   } catch (error) {
     mostrarToast(error.message || 'Erro ao fazer login', 'error');
   }
+    });
+  }
 });
 
 // Manipulador do formulário de registro
-document.getElementById('registro-form').addEventListener('submit', async (e) => {
+document.addEventListener('DOMContentLoaded', () => {
+  const registroForm = document.getElementById('registro-form');
+  if (registroForm) {
+    registroForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
   if (!validarFormularioRegistro(e.target)) {
@@ -106,7 +129,9 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
           nome: nome
         }
       }
-    });
+        });
+  }
+});
     
     if (error) throw error;
     
@@ -119,5 +144,7 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
   } catch (error) {
     console.error('Erro de registro:', error.message);
     mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
+  }
+    });
   }
 });

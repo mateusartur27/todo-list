@@ -73,8 +73,16 @@ async function configurarCabecalho() {
 
 // Função para calcular estatísticas das tarefas
 function calcularEstatisticas(tarefas) {
+  if (!Array.isArray(tarefas)) {
+    return {
+      total: 0,
+      concluidas: 0,
+      pendentes: 0,
+      percentualConcluidas: 0
+    };
+  }
   const total = tarefas.length;
-  const concluidas = tarefas.filter(t => t.status === 'CONCLUIDA').length;
+  const concluidas = tarefas.filter(t => t && t.status === 'CONCLUIDA').length;
   const pendentes = total - concluidas;
   const percentualConcluidas = total > 0 ? Math.round((concluidas / total) * 100) : 0;
   
@@ -90,6 +98,11 @@ function calcularEstatisticas(tarefas) {
 function atualizarResumoEstatistico(tarefas) {
   const stats = calcularEstatisticas(tarefas);
   const resumoContainer = document.getElementById('resumo-estatistico');
+  
+  if (!resumoContainer) {
+    console.error('Elemento resumo-estatistico não encontrado');
+    return;
+  }
   
   resumoContainer.innerHTML = `
     <div class="stats-item">
