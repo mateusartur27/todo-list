@@ -21,18 +21,24 @@ function mostrarToast(mensagem, tipo = 'success') {
 }
 
 // Alternar entre as abas de login e registro
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    // Remove a classe active de todos os botões e formulários
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-    
-    // Adiciona a classe active ao botão clicado e ao formulário correspondente
-    btn.classList.add('active');
-    const tabId = btn.dataset.tab;
-    document.getElementById(`${tabId}-form`).classList.add('active');
+const tabButtons = document.querySelectorAll('.tab-btn');
+if (tabButtons.length > 0) {
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove a classe active de todos os botões e formulários
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      
+      // Adiciona a classe active ao botão clicado e ao formulário correspondente
+      btn.classList.add('active');
+      const tabId = btn.dataset.tab;
+      const form = document.getElementById(`${tabId}-form`);
+      if (form) {
+        form.classList.add('active');
+      }
+    });
   });
-});
+}
 
 // Função para validar o formulário de registro
 function validarFormularioRegistro(form) {
@@ -53,76 +59,82 @@ function validarFormularioRegistro(form) {
 }
 
 // Manipulador do formulário de login
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  console.log('Iniciando login');
-  
-  const email = e.target.email.value;
-  const senha = e.target.senha.value;
-  
-  try {
-    console.log('Enviando dados de login', { email });
+const loginForm = document.getElementById('login-form');
+if (loginForm) {
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password: senha
-    });
+    console.log('Iniciando login');
     
-    if (error) throw error;
+    const email = e.target.email.value;
+    const senha = e.target.senha.value;
     
-    // O Supabase já gerencia o token de sessão automaticamente
-    const { user, session } = data;
-    
-    // Armazena informações adicionais do usuário e o token de autenticação
-    localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
-    localStorage.setItem('authToken', session.access_token);
-    
-    mostrarToast('Login realizado com sucesso!');
-    // Redireciona para a página principal após o login
-    window.location.href = 'index.html';
-    
-  } catch (error) {
-    console.error('Erro de login:', error.message);
-    mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
-  }
-});
+    try {
+      console.log('Enviando dados de login', { email });
+      
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password: senha
+      });
+      
+      if (error) throw error;
+      
+      // O Supabase já gerencia o token de sessão automaticamente
+      const { user, session } = data;
+      
+      // Armazena informações adicionais do usuário e o token de autenticação
+      localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
+      localStorage.setItem('authToken', session.access_token);
+      
+      mostrarToast('Login realizado com sucesso!');
+      // Redireciona para a página principal após o login
+      window.location.href = 'index.html';
+      
+    } catch (error) {
+      console.error('Erro de login:', error.message);
+      mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
+    }
+  });
+}
 
 // Manipulador do formulário de registro
-document.getElementById('registro-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  if (!validarFormularioRegistro(e.target)) {
-    return;
-  }
-  
-  const nome = e.target.nome.value;
-  const email = e.target.email.value;
-  const senha = e.target.senha.value;
-  
-  try {
-    console.log('Enviando dados de registro');
+const registroForm = document.getElementById('registro-form');
+if (registroForm) {
+  registroForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password: senha,
-      options: {
-        data: {
-          nome: nome
+    if (!validarFormularioRegistro(e.target)) {
+      return;
+    }
+    
+    const nome = e.target.nome.value;
+    const email = e.target.email.value;
+    const senha = e.target.senha.value;
+    
+    try {
+      console.log('Enviando dados de registro');
+      
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password: senha,
+        options: {
+          data: {
+            nome: nome
+          }
         }
-      }
-    });
-    
-    if (error) throw error;
-    
-    mostrarToast('Registro realizado com sucesso! Verifique seu email para confirmar o cadastro.');
-    // Limpa o formulário
-    e.target.reset();
-    // Muda para a aba de login
-    document.querySelector('.tab-btn[data-tab="login"]').click();
-    
-  } catch (error) {
-    console.error('Erro de registro:', error.message);
-    mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
-  }
-});
+      });
+      
+      if (error) throw error;
+      
+      mostrarToast('Registro realizado com sucesso! Verifique seu email para confirmar o cadastro.');
+      // Limpa o formulário
+      e.target.reset();
+      // Muda para a aba de login
+      document.querySelector('.tab-btn[data-tab="login"]').click();
+      
+    } catch (error) {
+      console.error('Erro de registro:', error.message);
+      mostrarToast(error.message || 'Erro ao realizar registro. Tente novamente.', 'error');
+    }
+  });
+}

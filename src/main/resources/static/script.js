@@ -122,7 +122,7 @@ async function carregarTarefas(userId) {
     mostrarToast('Usuário não autenticado.', 'error');
     return;
   }
-  const { data: tarefasData, error } = await supabaseClient
+  const { data: tarefas, error } = await supabaseClient
     .from('tarefas')
     .select('*')
     .eq('user_id', userId);
@@ -132,7 +132,6 @@ async function carregarTarefas(userId) {
     return;
   }
 
-  const tarefas = tarefasData;
   const ul = document.getElementById('lista-tarefas');
   
   // Atualiza o resumo estatístico
