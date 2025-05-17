@@ -10,12 +10,18 @@ async function exportarListaTarefas() {
       return;
     }
     const userId = session.user.id;
-    const authToken = session.access_token;
-    const resp = await fetch(`${API}?userId=${userId}`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`
-      }
-    });
+  // Removida referência ao authToken pois agora usamos o Supabase
+  const { data: tarefasData, error } = await supabaseClient
+    .from('tarefas')
+    .select('*')
+    .eq('user_id', userId);
+
+  if (error) {
+    mostrarToast('Erro ao carregar tarefas.', 'error');
+    return;
+  }
+
+  const tarefas = tarefasData;
     const tarefas = await resp.json();
     
     // Criar o objeto Blob com os dados
@@ -73,16 +79,8 @@ async function configurarCabecalho() {
 
 // Função para calcular estatísticas das tarefas
 function calcularEstatisticas(tarefas) {
-  if (!Array.isArray(tarefas)) {
-    return {
-      total: 0,
-      concluidas: 0,
-      pendentes: 0,
-      percentualConcluidas: 0
-    };
-  }
   const total = tarefas.length;
-  const concluidas = tarefas.filter(t => t && t.status === 'CONCLUIDA').length;
+  const concluidas = tarefas.filter(t => t.status === 'CONCLUIDA').length;
   const pendentes = total - concluidas;
   const percentualConcluidas = total > 0 ? Math.round((concluidas / total) * 100) : 0;
   
@@ -98,11 +96,6 @@ function calcularEstatisticas(tarefas) {
 function atualizarResumoEstatistico(tarefas) {
   const stats = calcularEstatisticas(tarefas);
   const resumoContainer = document.getElementById('resumo-estatistico');
-  
-  if (!resumoContainer) {
-    console.error('Elemento resumo-estatistico não encontrado');
-    return;
-  }
   
   resumoContainer.innerHTML = `
     <div class="stats-item">
@@ -130,12 +123,17 @@ async function carregarTarefas(userId) {
     mostrarToast('Usuário não autenticado.', 'error');
     return;
   }
-  const authToken = session.access_token;
-  const resp = await fetch(`${API}?userId=${userId}`, {
-    headers: {
-      'Authorization': `Bearer ${authToken}`
-    }
-  });
+  const { data: tarefasData, error } = await supabaseClient
+    .from('tarefas')
+    .select('*')
+    .eq('user_id', userId);
+
+  if (error) {
+    mostrarToast('Erro ao carregar tarefas.', 'error');
+    return;
+  }
+
+  const tarefas = tarefasData;
   const tarefas = await resp.json();
   const ul = document.getElementById('lista-tarefas');
   
@@ -257,28 +255,28 @@ document.getElementById('nova-tarefa')
         return;
       }
       const userId = session.user.id;
-      const response = await fetch(`${API}?userId=${userId}`, {
-        method: 'POST',
-        headers: {
-        'Content-Type':'application/json',
-        'Authorization': `Bearer ${session.access_token}`
-      },
-        body: JSON.stringify({
-          titulo: title,
-          descricao: desc,
-          dataVencimento: data,
-          status: 'PENDENTE'
-        })
-      });
-      
-      if (response.ok) {
-        mostrarToast('Tarefa adicionada com sucesso!');
-        e.target.reset();
-        carregarTarefas();
-        atualizarResumoEstatistico();
-      } else {
+      const { data, error } = await supabaseClient
+        .from('tarefas')
+        .insert([
+          {
+            titulo: title,
+            descricao: desc,
+            dataVencimento: data,
+            status: 'PENDENTE',
+            user_id: userId
+          }
+        ])
+        .select();
+
+      if (error) {
         mostrarToast('Erro ao adicionar tarefa.', 'error');
+        return;
       }
+      
+      mostrarToast('Tarefa adicionada com sucesso!');
+    e.target.reset();
+    carregarTarefas(userId);
+    atualizarResumoEstatistico();
     } catch (error) {
       mostrarToast('Erro ao adicionar tarefa.', 'error');
     }
@@ -293,14 +291,14 @@ async function concluir(id) {
     return;
   }
   const userId = session.user.id;
-  const response = await fetch(`${API}/${id}/${isCompleted ? 'desmarcar' : 'concluir'}?userId=${userId}`, { 
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${session.access_token}`
-    }
-  });
-  if (response.ok) {
-    const tarefa = await response.json();
+  const { data, error } = await supabaseClient
+    .from('tarefas')
+    .update({ status: isCompleted ? 'PENDENTE' : 'CONCLUIDA' })
+    .eq('id', id)
+    .eq('user_id', userId)
+    .select();
+  if (!error) {
+    const tarefa = data[0];
     li.classList.toggle('completed');
     li.querySelector('.task-status').textContent = tarefa.status === 'CONCLUIDA' ? 'X Concluída' : '⌛ Pendente';
     li.querySelector('button[title]').title = tarefa.status === 'CONCLUIDA' ? 'Desmarcar tarefa' : 'Marcar como concluída';
@@ -377,18 +375,20 @@ function editar(id) {
       return;
     }
     const userId = session.user.id;
-    await fetch(`${API}/${id}?userId=${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type':'application/json',
-        'Authorization': `Bearer ${session.access_token}`
-      },
-      body: JSON.stringify({
+    const { error } = await supabaseClient
+      .from('tarefas')
+      .update({
         titulo: formData.get('titulo'),
         descricao: formData.get('descricao'),
         dataVencimento: data
       })
-    });
+      .eq('id', id)
+      .eq('user_id', userId);
+
+    if (error) {
+      mostrarToast('Erro ao editar tarefa.', 'error');
+      return;
+    }
     
     taskContent.style.display = 'block';
     taskActions.style.display = 'flex';
@@ -528,12 +528,16 @@ async function excluir(id) {
     return;
   }
   const userId = session.user.id;
-  await fetch(`${API}/${id}?userId=${userId}`, { 
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${session.access_token}`
-    }
-  });
+  const { error } = await supabaseClient
+    .from('tarefas')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId);
+
+  if (error) {
+    mostrarToast('Erro ao excluir tarefa.', 'error');
+    return;
+  }
   const elementoTarefa = document.getElementById(`tarefa-${id}`);
   elementoTarefa.style.animation = 'slideOut 0.3s ease-out forwards';
   
