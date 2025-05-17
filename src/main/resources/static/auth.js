@@ -52,18 +52,13 @@ function validarFormularioRegistro(form) {
   return true;
 }
 
-// Manipulador do formulário de login
+// Formulário de Login
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  
-  console.log('Iniciando login');
-  
   const email = e.target.email.value;
   const senha = e.target.senha.value;
   
   try {
-    console.log('Enviando dados de login', { email });
-    
     const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password: senha
@@ -71,20 +66,20 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     
     if (error) throw error;
     
-    // O Supabase já gerencia o token de sessão automaticamente
-    const { user, session } = data;
+    // Armazena o nome do usuário no localStorage
+    if (data.user.user_metadata && data.user.user_metadata.nome) {
+      localStorage.setItem('usuarioNome', data.user.user_metadata.nome);
+    }
     
-    // Armazena informações adicionais do usuário e o token de autenticação
-    localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
-    localStorage.setItem('authToken', session.access_token);
+    // Armazena o token de acesso para uso nas requisições à API
+    if (data.session && data.session.access_token) {
+      localStorage.setItem('authToken', data.session.access_token);
+    }
     
-    mostrarToast('Login realizado com sucesso!');
-    // Redireciona para a página principal após o login
+    // Redireciona para a página principal
     window.location.href = 'index.html';
-    
   } catch (error) {
-    console.error('Erro de login:', error.message);
-    mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
+    mostrarToast(error.message || 'Erro ao fazer login', 'error');
   }
 });
 

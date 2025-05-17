@@ -10,12 +10,12 @@ async function exportarListaTarefas() {
       return;
     }
     const userId = session.user.id;
-  const authToken = localStorage.getItem('authToken');
-  const resp = await fetch(`${API}?userId=${userId}`, {
-    headers: {
-      'Authorization': `Bearer ${authToken}`
-    }
-  });
+    const authToken = session.access_token;
+    const resp = await fetch(`${API}?userId=${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    });
     const tarefas = await resp.json();
     
     // Criar o objeto Blob com os dados
@@ -117,6 +117,7 @@ async function carregarTarefas(userId) {
     mostrarToast('Usuário não autenticado.', 'error');
     return;
   }
+  const authToken = session.access_token;
   const resp = await fetch(`${API}?userId=${userId}`, {
     headers: {
       'Authorization': `Bearer ${authToken}`
@@ -246,9 +247,9 @@ document.getElementById('nova-tarefa')
       const response = await fetch(`${API}?userId=${userId}`, {
         method: 'POST',
         headers: {
-          'Content-Type':'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-        },
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
         body: JSON.stringify({
           titulo: title,
           descricao: desc,
@@ -282,7 +283,7 @@ async function concluir(id) {
   const response = await fetch(`${API}/${id}/${isCompleted ? 'desmarcar' : 'concluir'}?userId=${userId}`, { 
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      'Authorization': `Bearer ${session.access_token}`
     }
   });
   if (response.ok) {
@@ -367,7 +368,7 @@ function editar(id) {
       method: 'PUT',
       headers: {
         'Content-Type':'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${session.access_token}`
       },
       body: JSON.stringify({
         titulo: formData.get('titulo'),
@@ -517,7 +518,7 @@ async function excluir(id) {
   await fetch(`${API}/${id}?userId=${userId}`, { 
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      'Authorization': `Bearer ${session.access_token}`
     }
   });
   const elementoTarefa = document.getElementById(`tarefa-${id}`);
