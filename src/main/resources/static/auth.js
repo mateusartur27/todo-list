@@ -100,7 +100,7 @@ function inicializarFormularios() {
       
     } catch (error) {
       console.error('Erro de login:', error.message);
-      mostrarToast(error.message || 'Erro ao realizar login. Tente novamente.', 'error');
+      mostrarToast('Erro ao realizar login. Tente novamente.', 'error');
     }
     });
   } else {
