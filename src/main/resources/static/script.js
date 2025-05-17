@@ -14,7 +14,7 @@ async function exportarListaTarefas() {
   const { data: tarefasData, error } = await supabaseClient
     .from('tarefas')
     .select('*')
-    .eq('uid', uid);
+    .eq('user_id', uid);
 
   if (error) {
     mostrarToast('Erro ao carregar tarefas.', 'error');
@@ -113,7 +113,7 @@ async function atualizarResumoEstatistico() {
     const { data: tarefas, error } = await supabaseClient
       .from('tarefas')
       .select('*')
-      .eq('uid', session.user.id);
+      .eq('user_id', session.user.id);
 
     if (error) {
       console.error('Erro ao carregar tarefas para estatísticas:', error);
@@ -160,7 +160,7 @@ async function carregarTarefas() {
   const { data: tarefas, error } = await supabaseClient
     .from('tarefas')
     .select('*')
-    .eq('uid', session.user.id);
+    .eq('user_id', session.user.id);
 
   if (error) {
     mostrarToast('Erro ao carregar tarefas.', 'error');
@@ -343,7 +343,7 @@ async function concluir(id) {
     .from('tarefas')
     .update({ status: isCompleted ? 'PENDENTE' : 'CONCLUIDA' })
     .eq('id', id)
-    .eq('uid', uid)
+    .eq('user_id', uid)
     .select();
   if (!error) {
     const tarefa = data[0];
