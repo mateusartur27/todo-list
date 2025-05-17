@@ -22,7 +22,6 @@ async function exportarListaTarefas() {
   }
 
   const tarefas = tarefasData;
-    const tarefas = await resp.json();
     
     // Criar o objeto Blob com os dados
     const blob = new Blob([JSON.stringify(tarefas, null, 2)], { type: 'application/json' });
@@ -134,7 +133,6 @@ async function carregarTarefas(userId) {
   }
 
   const tarefas = tarefasData;
-  const tarefas = await resp.json();
   const ul = document.getElementById('lista-tarefas');
   
   // Atualiza o resumo estatístico
