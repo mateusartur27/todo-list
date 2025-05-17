@@ -94,28 +94,6 @@ function inicializarFormularios() {
       localStorage.setItem('usuarioNome', user.user_metadata.nome || user.email);
       localStorage.setItem('authToken', session.access_token);
       
-      // Verifica se o elemento de saudação já existe
-      if (!document.getElementById('saudacao-usuario')) {
-        const saudacao = document.createElement('div');
-        saudacao.id = 'saudacao-usuario';
-        saudacao.textContent = `Olá, ${user.user_metadata.nome || user.email.split('@')[0]}`;
-        
-        const botaoSair = document.createElement('button');
-        botaoSair.textContent = 'Sair';
-        botaoSair.addEventListener('click', () => {
-          supabaseClient.auth.signOut();
-          localStorage.removeItem('usuarioNome');
-          localStorage.removeItem('authToken');
-          window.location.href = 'login.html';
-        });
-        
-        const container = document.getElementById('user-container');
-        if (container) {
-          container.appendChild(saudacao);
-          container.appendChild(botaoSair);
-        }
-      }
-      
       mostrarToast('Login realizado com sucesso!');
       // Redireciona para a página principal após o login
       window.location.href = 'index.html';
@@ -174,7 +152,37 @@ function inicializarFormularios() {
   }
 }
 
+// Função para configurar o cabeçalho do usuário
+function configurarCabecalho() {
+  const header = document.querySelector('.header');
+  // se já adicionou, não faz nada
+  if (header.querySelector('.user-info')) return;
+
+  const usuarioNome = localStorage.getItem('usuarioNome') || 'Usuário';
+  const userInfo = document.createElement('div');
+  userInfo.className = 'user-info';
+  userInfo.innerHTML = `
+    <span>Olá, ${usuarioNome}</span>
+    <button id="btn-logout" class="btn-logout">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+  `;
+  header.appendChild(userInfo);
+
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  });
+}
+
 // Inicializa os formulários quando o DOM estiver carregado
 if (document.getElementById('login-form') || document.getElementById('registro-form')) {
-  document.addEventListener('DOMContentLoaded', inicializarFormularios);
+  document.addEventListener('DOMContentLoaded', () => {
+    inicializarFormularios();
+    
+    // Verifica se o usuário está autenticado e configura o cabeçalho
+    if (localStorage.getItem('authToken')) {
+      configurarCabecalho();
+    }
+  });
 }
