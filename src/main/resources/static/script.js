@@ -9,12 +9,12 @@ async function exportarListaTarefas() {
       mostrarToast('Usuário não autenticado.', 'error');
       return;
     }
-    const userId = session.user.id;
-  // Removida referência ao authToken pois agora usamos o Supabase
+    const uid = session.user.id;
+  // Usando uid do Supabase Authentication
   const { data: tarefasData, error } = await supabaseClient
     .from('tarefas')
     .select('*')
-    .eq('user_id', userId);
+    .eq('uid', uid);
 
   if (error) {
     mostrarToast('Erro ao carregar tarefas.', 'error');
@@ -113,7 +113,7 @@ async function atualizarResumoEstatistico() {
     const { data: tarefas, error } = await supabaseClient
       .from('tarefas')
       .select('*')
-      .eq('user_id', session.user.id);
+      .eq('uid', session.user.id);
 
     if (error) {
       console.error('Erro ao carregar tarefas para estatísticas:', error);
@@ -160,7 +160,7 @@ async function carregarTarefas() {
   const { data: tarefas, error } = await supabaseClient
     .from('tarefas')
     .select('*')
-    .eq('user_id', session.user.id);
+    .eq('uid', session.user.id);
 
   if (error) {
     mostrarToast('Erro ao carregar tarefas.', 'error');
@@ -311,7 +311,7 @@ document.getElementById('nova-tarefa')
             descricao: desc,
             dataVencimento: data,
             status: 'PENDENTE',
-            user_id: userId
+            uid: userId
           }
         ])
         .select();
@@ -338,12 +338,12 @@ async function concluir(id) {
     mostrarToast('Usuário não autenticado.', 'error');
     return;
   }
-  const userId = session.user.id;
+  const uid = session.user.id;
   const { data, error } = await supabaseClient
     .from('tarefas')
     .update({ status: isCompleted ? 'PENDENTE' : 'CONCLUIDA' })
     .eq('id', id)
-    .eq('user_id', userId)
+    .eq('uid', uid)
     .select();
   if (!error) {
     const tarefa = data[0];
@@ -431,7 +431,7 @@ function editar(id) {
         dataVencimento: data
       })
       .eq('id', id)
-      .eq('user_id', userId);
+      .eq('uid', userId);
 
     if (error) {
       mostrarToast('Erro ao editar tarefa.', 'error');
@@ -580,7 +580,7 @@ async function excluir(id) {
     .from('tarefas')
     .delete()
     .eq('id', id)
-    .eq('user_id', userId);
+    .eq('uid', userId);
 
   if (error) {
     mostrarToast('Erro ao excluir tarefa.', 'error');
