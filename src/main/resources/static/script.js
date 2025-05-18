@@ -284,7 +284,7 @@ function configurarMascaraData(input) {
 }
 
 // Configuração do flatpickr para formulário de adição
-const novoDate = document.querySelector('#nova-tarefa input[name="dataVencimento"]');
+const novoDate = document.querySelector('#nova-tarefa input[name="data_vencimento"]');
 if (!novoDate) {
   console.error('Campo de data não encontrado no formulário de nova tarefa');
 } else {
