@@ -311,30 +311,29 @@ document.getElementById('nova-tarefa')
         return;
       }
       const userId = session.user.id;
-      const { data, error } = await supabaseClient
+      const { data: insertedData, error } = await supabaseClient
         .from('tarefas')
         .insert([
           {
             titulo: title,
             descricao: desc,
             dataVencimento: data,
-
             status: 'PENDENTE',
             user_id: session.user.id
           }
         ])
         .select();
-
+      
       if (error) {
         mostrarToast('Erro ao adicionar tarefa.', 'error');
-    console.error('Erro detalhado ao adicionar tarefa:', error);
-    return;
-    }
-    
-    mostrarToast('Tarefa adicionada com sucesso!');
-    e.target.reset();
-    carregarTarefas(userId);
-    atualizarResumoEstatistico();
+        console.error('Erro detalhado ao adicionar tarefa:', error);
+        return;
+      }
+      
+      mostrarToast('Tarefa adicionada com sucesso!');
+      e.target.reset();
+      carregarTarefas(userId);
+      atualizarResumoEstatistico();
     } catch (error) {
     mostrarToast('Erro ao adicionar tarefa.', 'error');
     console.error('Erro detalhado ao adicionar tarefa:', error);
