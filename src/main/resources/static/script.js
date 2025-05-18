@@ -285,16 +285,18 @@ function configurarMascaraData(input) {
 
 // Configuração do flatpickr para formulário de adição
 const novoDate = document.querySelector('#nova-tarefa input[name="data_vencimento"]');
-flatpickr(novoDate, {
-  locale: "pt",
-  dateFormat: "d/m/Y",
-  allowInput: true,
-  clickOpens: true,
-  defaultDate: null,
-  onChange: function([date], dateStr, instance) {
-    instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
-  }
-});
+if (novoDate) {
+  flatpickr(novoDate, {
+    locale: "pt",
+    dateFormat: "d/m/Y",
+    allowInput: true,
+    clickOpens: true,
+    defaultDate: null,
+    onChange: function([date], dateStr, instance) {
+      instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
+    }
+  });
+}
 
 document.getElementById('nova-tarefa')
   .addEventListener('submit', async e => {
