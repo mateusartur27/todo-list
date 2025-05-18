@@ -304,6 +304,10 @@ document.getElementById('nova-tarefa')
     const title = e.target.titulo.value;
     const desc = e.target.descricao.value;
     const dataInput = e.target.data_vencimento;
+    if (!dataInput) {
+      console.error('Elemento de entrada de data não encontrado');
+      return;
+    }
     const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
     try {
