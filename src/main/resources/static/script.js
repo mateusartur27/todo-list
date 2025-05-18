@@ -217,7 +217,7 @@ async function carregarTarefas() {
           <div class="input-fields">
             <input name="titulo" type="text" value="${t.titulo}" required />
             <input name="descricao" type="text" value="${t.descricao}" required />
-            <input name="dataVencimento" type="date" value="${t.data_vencimento}" required />
+            <input name="data_vencimento" type="date" value="${t.data_vencimento}" required />
           </div>
           <div class="input-group__buttons">
             <button type="submit" class="input-group__button">
@@ -254,7 +254,7 @@ function filtrarTarefas(tarefas) {
     tarefasFiltradas = tarefasFiltradas.filter(t => 
       t.titulo.toLowerCase().includes(termo) || 
       t.descricao.toLowerCase().includes(termo) ||
-      (isDataCompleta && formatarData(t.dataVencimento).includes(termo))
+      (isDataCompleta && formatarData(t.data_vencimento).includes(termo))
     );
   }
   
@@ -284,7 +284,7 @@ function configurarMascaraData(input) {
 }
 
 // Configuração do flatpickr para formulário de adição
-const novoDate = document.querySelector('#nova-tarefa input[name="dataVencimento"]');
+const novoDate = document.querySelector('#nova-tarefa input[name="data_vencimento"]');
 flatpickr(novoDate, {
   locale: "pt",
   dateFormat: "d/m/Y",
@@ -301,7 +301,7 @@ document.getElementById('nova-tarefa')
     e.preventDefault();
     const title = e.target.titulo.value;
     const desc = e.target.descricao.value;
-    const dataInput = e.target.dataVencimento;
+    const dataInput = e.target.data_vencimento;
     const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
     try {
@@ -317,7 +317,7 @@ document.getElementById('nova-tarefa')
           {
             titulo: title,
             descricao: desc,
-            dataVencimento: data,
+            data_vencimento: data,
             status: 'PENDENTE',
             user_id: session.user.id
           }
@@ -400,7 +400,7 @@ function editar(id) {
   editTitle.value = currentTitle;
   editDescription.value = currentDescription;
   
-  const editDate = editForm.querySelector('input[name="dataVencimento"]');
+  const editDate = editForm.querySelector('input[name="data_vencimento"]');
   const dataOriginal = li.querySelector('.task-date').textContent;
   
   // Configura o valor inicial do campo de data no formato esperado pelo Flatpickr
@@ -424,7 +424,7 @@ function editar(id) {
   editForm.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const dataInput = editForm.querySelector('input[name="dataVencimento"]');
+    const dataInput = editForm.querySelector('input[name="data_vencimento"]');
     const data = dataInput.getAttribute('data-valor-api') || formatarDataParaAPI(dataInput.value);
     
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -438,7 +438,7 @@ function editar(id) {
       .update({
         titulo: formData.get('titulo'),
         descricao: formData.get('descricao'),
-        dataVencimento: data
+        data_vencimento: data
       })
       .eq('id', id)
       .eq('user_id', userId);
@@ -513,7 +513,7 @@ function aplicarMascaraData(input) {
 function ordenarTarefas(tarefas) {
   return tarefas.sort((a, b) => {
     if (ordenacao === 'data') {
-      return new Date(a.dataVencimento) - new Date(b.dataVencimento);
+      return new Date(a.data_vencimento) - new Date(b.data_vencimento);
     } else if (ordenacao === 'titulo') {
       // Extrai números do início dos títulos para comparação numérica
       const numA = parseInt(a.titulo.match(/^\d+/)?.[0] || '0');
@@ -638,7 +638,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 });
 
 // Configuração do flatpickr
-flatpickr("input[name='dataVencimento']", {
+flatpickr("input[name='data_vencimento']", {
   locale: "pt",
   dateFormat: "d/m/Y",
   allowInput: true,
