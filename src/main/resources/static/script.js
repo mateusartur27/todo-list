@@ -181,7 +181,7 @@ async function carregarTarefas() {
   const tarefasArray = Array.isArray(tarefas) ? tarefas : [];
   
   // Atualiza o resumo estatístico
-  atualizarResumoEstatistico(tarefasArray);
+  atualizarResumoEstatistico();
   
   let tarefasFiltradas = filtrarTarefas(tarefasArray);
   tarefasFiltradas = ordenarTarefas(tarefasFiltradas);
@@ -332,7 +332,7 @@ document.getElementById('nova-tarefa')
       
       mostrarToast('Tarefa adicionada com sucesso!');
     e.target.reset();
-    carregarTarefas(userId);
+    carregarTarefas();
     atualizarResumoEstatistico();
     } catch (error) {
       mostrarToast('Erro ao adicionar tarefa.', 'error');
