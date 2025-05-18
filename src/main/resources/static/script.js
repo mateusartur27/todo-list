@@ -318,8 +318,9 @@ document.getElementById('nova-tarefa')
             titulo: title,
             descricao: desc,
             dataVencimento: data,
+
             status: 'PENDENTE',
-            user_id: userId
+            user_id: session.user.id
           }
         ])
         .select();
@@ -351,7 +352,7 @@ async function concluir(id) {
     .from('tarefas')
     .update({ status: isCompleted ? 'PENDENTE' : 'CONCLUIDA' })
     .eq('id', id)
-    .eq('user_id', uid)
+    .eq('user_id', session.user.id)
     .select();
   if (!error) {
     const tarefa = data[0];
