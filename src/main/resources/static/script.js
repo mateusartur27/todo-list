@@ -181,7 +181,7 @@ async function carregarTarefas() {
   const tarefasArray = Array.isArray(tarefas) ? tarefas : [];
   
   // Atualiza o resumo estatístico
-  atualizarResumoEstatistico();
+  atualizarResumoEstatistico(tarefasArray);
   
   let tarefasFiltradas = filtrarTarefas(tarefasArray);
   tarefasFiltradas = ordenarTarefas(tarefasFiltradas);
@@ -327,15 +327,17 @@ document.getElementById('nova-tarefa')
 
       if (error) {
         mostrarToast('Erro ao adicionar tarefa.', 'error');
-        return;
-      }
-      
-      mostrarToast('Tarefa adicionada com sucesso!');
+    console.error('Erro detalhado ao adicionar tarefa:', error);
+    return;
+    }
+    
+    mostrarToast('Tarefa adicionada com sucesso!');
     e.target.reset();
-    carregarTarefas();
+    carregarTarefas(userId);
     atualizarResumoEstatistico();
     } catch (error) {
-      mostrarToast('Erro ao adicionar tarefa.', 'error');
+    mostrarToast('Erro ao adicionar tarefa.', 'error');
+    console.error('Erro detalhado ao adicionar tarefa:', error);
     }
   });
 
