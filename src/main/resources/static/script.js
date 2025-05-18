@@ -204,7 +204,7 @@ async function carregarTarefas() {
       <div class="task-content">
         <span class="task-title">${t.titulo}</span>
         <span class="task-description">${t.descricao}</span>
-        <span class="task-date">${formatarData(t.dataVencimento)}</span>
+        <span class="task-date">${formatarData(t.data_vencimento)}</span>
         <span class="task-status">${t.status === 'CONCLUIDA' ? 'X Concluída' : '⌛ Pendente'}</span>
       </div>
       <div class="task-actions">
@@ -217,7 +217,7 @@ async function carregarTarefas() {
           <div class="input-fields">
             <input name="titulo" type="text" value="${t.titulo}" required />
             <input name="descricao" type="text" value="${t.descricao}" required />
-            <input name="dataVencimento" type="date" value="${t.dataVencimento}" required />
+            <input name="dataVencimento" type="date" value="${t.data_vencimento}" required />
           </div>
           <div class="input-group__buttons">
             <button type="submit" class="input-group__button">
