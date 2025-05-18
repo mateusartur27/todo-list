@@ -82,7 +82,6 @@ async function configurarCabecalho() {
     localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
     window.location.href = 'login.html';
   });
-});
 }
 
 // Função para calcular estatísticas das tarefas
@@ -279,7 +278,6 @@ function configurarMascaraData(input) {
       }
     }
   });
-});
 
   // reaplica máscara a cada input
   input.addEventListener('input', () => aplicarMascaraData(input));
@@ -298,16 +296,14 @@ if (novoDate) {
       instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
     }
   });
-});
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('nova-tarefa')
-    .addEventListener('submit', async e => {
+document.getElementById('nova-tarefa')
+  .addEventListener('submit', async e => {
     e.preventDefault();
     const title = e.target.titulo.value;
     const desc = e.target.descricao.value;
-    const dataInput = e.target.data_vencimento;
+    const dataInput = e.target.querySelector('input[name="data_vencimento"]');
     if (!dataInput) {
       console.error('Elemento de entrada de data não encontrado');
       return;
@@ -349,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Erro detalhado ao adicionar tarefa:', error);
     }
   });
-});
 
 async function concluir(id) {
   const li = document.getElementById(`tarefa-${id}`);
@@ -431,7 +426,6 @@ function editar(id) {
       instance.element.setAttribute('data-valor-api', date.toISOString().slice(0,10));
     }
   });
-});
   
   editForm.onsubmit = async (e) => {
     e.preventDefault();
@@ -482,7 +476,6 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     filtroAtual = btn.dataset.filter;
     carregarTarefas();
   });
-});
 });
 
 // Funções auxiliares
@@ -542,7 +535,6 @@ function ordenarTarefas(tarefas) {
     }
     return a.id - b.id;
   });
-});
 }
 
 function mostrarToast(mensagem, tipo = 'success') {
@@ -588,7 +580,6 @@ function mostrarModalConfirmacao(id) {
       resolve(true);
     };
   });
-});
 }
 
 async function excluir(id) {
