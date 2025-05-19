@@ -29,6 +29,7 @@ body {
   gap: 10px;
   flex-wrap: wrap;
   width: 100%;
+  max-width: 100%;
 }
 
 .input-fields input {
@@ -38,6 +39,8 @@ body {
   border-radius: 4px;
   font-size: 16px;
   min-width: 120px;
+  width: 100%;
+  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
@@ -68,6 +71,8 @@ body {
   align-items: center;
   gap: 5px;
   font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .input-group__button:hover {
@@ -163,11 +168,13 @@ body {
   .input-group {
     flex-direction: column;
     gap: 15px;
+    width: 100%;
   }
   
   .input-fields {
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
   }
   
   .input-fields input {
@@ -199,6 +206,7 @@ body {
   .edit-form .input-fields {
   flex-direction: column;
   width: 100%;
+  max-width: 100%;
 }
 
 .edit-form .input-fields input {
@@ -208,6 +216,7 @@ body {
   font-size: 16px;
   border-radius: 4px;
   border: 1px solid #ddd;
+  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
