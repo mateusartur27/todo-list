@@ -82,6 +82,12 @@ async function configurarCabecalho() {
     localStorage.removeItem('usuarioNome'); // Remove apenas o nome, Supabase cuida do resto
     window.location.href = 'login.html';
   });
+
+  // Verifica se o toast já foi exibido
+  if (!localStorage.getItem('cabecalhoConfigurado')) {
+    mostrarToast('Login realizado com sucesso!');
+    localStorage.setItem('cabecalhoConfigurado', 'true');
+  }
 }
 
 // Função para calcular estatísticas das tarefas
@@ -630,7 +636,6 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
       if (verificacabecalho === false) {
         configurarCabecalho();
         mostrarToast('Login realizado com sucesso!');
-        verificacabecalho = true;
       }
       carregarTarefas();
       atualizarResumoEstatistico();
