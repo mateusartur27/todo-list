@@ -20,20 +20,41 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .input-fields {
   flex: 1;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .input-fields input {
   flex: 1;
-  padding: 8px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
+  min-width: 120px;
+  transition: all 0.3s ease;
+}
+
+.input-fields input:focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  outline: none;
+}
+
+/* Melhorias para o formulário de edição */
+.edit-form {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.edit-form .input-group {
+  margin-bottom: 10px;
 }
 
 .input-group__button {
@@ -137,17 +158,113 @@ body {
   color: #888;
 }
 
+/* Media queries para responsividade */
+@media screen and (max-width: 768px) {
+  .input-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-fields {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .input-fields input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .input-group__buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+  
+  .input-group__button {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .task-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .edit-form .input-fields {
+  flex-direction: column;
+  width: 100%;
+}
+
+.edit-form .input-fields input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.edit-form .input-fields input:focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  outline: none;
+}
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+  
+  .container {
+    padding: 15px;
+  }
+  
+  .input-fields input,
+  .search-input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .task-list li {
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .task-actions {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 /* Estilos de busca e filtros */
 .search-container {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .search-input {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  outline: none;
 }
 
 .filter-buttons {

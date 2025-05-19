@@ -68,7 +68,7 @@ async function configurarCabecalho() {
   const userInfo = document.createElement('div');
   userInfo.className = 'user-info';
   userInfo.innerHTML = `
-    <span>Olá, ${usuarioNome || 'Usuário'}</span>
+    <span>Olá, ${usuarioNome || 'Usuário'}!</span>
     <button id="btn-logout" class="btn-logout">
       <i class="fas fa-sign-out-alt"></i> Sair
     </button>
