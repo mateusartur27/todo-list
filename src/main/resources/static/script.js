@@ -623,30 +623,27 @@ document.getElementById('ordenacao').addEventListener('change', (e) => {
 });
 
 // Monitora as mudanças no estado de autenticação do Supabase
-verificacabecalho = false;
 supabaseClient.auth.onAuthStateChange((event, session) => {
   if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
     // Usuário autenticado
     if (session) {
-      if (verificacabecalho === false) {
-        configurarCabecalho();
-      }
-      // Verifica se o toast já foi exibido
+      // Verifica se o toast já foi exibido e configura cabeçalho apenas uma vez
       if (!localStorage.getItem('cabecalhoConfigurado')) {
+        configurarCabecalho();
         mostrarToast('Login realizado com sucesso!');
         localStorage.setItem('cabecalhoConfigurado', 'true');
       }
+      
       carregarTarefas();
       atualizarResumoEstatistico();
-      console.log('Usuário autenticado com ID:', session.user.id);
-      verificacabecalho = true;
+      console.log('Usuário autenticado com ID:', session.user.id)
     }
   } else if (event === 'SIGNED_OUT') {
     // Usuário desautenticado
     console.log('Usuário desautenticado');
     // Redireciona para a página de login
     window.location.href = 'login.html';
-    verificacabecalho = false;
+    localStorage.removeItem('cabecalhoConfigurado');
   }
 });
 
