@@ -629,7 +629,11 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
       if (verificacabecalho === false) {
         configurarCabecalho();
-        mostrarToast('Login realizado com sucesso!');
+        // Verifica se a saudação já foi exibida
+        if (!localStorage.getItem('saudacaoExibida')) {
+          mostrarToast('Login realizado com sucesso!');
+          localStorage.setItem('saudacaoExibida', 'true');
+        }
       }
       carregarTarefas();
       atualizarResumoEstatistico();
