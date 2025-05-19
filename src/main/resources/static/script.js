@@ -83,11 +83,6 @@ async function configurarCabecalho() {
     window.location.href = 'login.html';
   });
 
-  // Verifica se o toast já foi exibido
-  if (!localStorage.getItem('cabecalhoConfigurado')) {
-    mostrarToast('Login realizado com sucesso!');
-    localStorage.setItem('cabecalhoConfigurado', 'true');
-  }
 }
 
 // Função para calcular estatísticas das tarefas
@@ -635,7 +630,11 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {
       if (verificacabecalho === false) {
         configurarCabecalho();
+      }
+      // Verifica se o toast já foi exibido
+      if (!localStorage.getItem('cabecalhoConfigurado')) {
         mostrarToast('Login realizado com sucesso!');
+        localStorage.setItem('cabecalhoConfigurado', 'true');
       }
       carregarTarefas();
       atualizarResumoEstatistico();
