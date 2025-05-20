@@ -402,7 +402,7 @@ p {
 }
 
 .search-input {
-  width: 70%; /* Ajuste a largura conforme necessário */
+  width: 100%; /* Ajuste a largura conforme necessário */
   padding: 0.75rem 2.5rem 0.75rem 1rem;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
