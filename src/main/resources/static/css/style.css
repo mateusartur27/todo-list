@@ -174,22 +174,49 @@ p {
   
   .edit-form {
     margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .edit-form .input-fields {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .edit-form .input-fields input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+  }
+  
+  .edit-form .input-fields input:focus {
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    outline: none;
   }
   
   @media (max-width: 768px) {
     .edit-form .input-fields {
         max-width: 100%;
+        margin: 0;
+        padding: 0;
     }
     
     .edit-form .input-group__buttons {
         display: flex;
         flex-direction: column;
         width: 100%;
+        gap: 10px;
+        margin-top: 10px;
     }
     
     .edit-form .input-group__button {
         margin-left: 0 !important;
         width: 100%;
+        padding: 12px;
     }
   }
   
