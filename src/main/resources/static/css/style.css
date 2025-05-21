@@ -144,6 +144,7 @@ p {
     font-size: 1rem;
     transition: border-color 0.3s ease;
     box-sizing: border-box;
+    margin-bottom: 0.5rem;
 }
 
 .input-group input:focus {
@@ -162,7 +163,8 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-size: 1rem;
 }
 
 .input-group__buttons button:hover {
@@ -180,12 +182,13 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     min-width: 120px;
     text-align: center;
     justify-content: center;
     margin-bottom: 0.5rem;
-  }
+    font-size: 1rem;
+}
   
   .edit-form {
     margin-top: 1rem;
@@ -243,12 +246,11 @@ p {
   }
   
   .task-list li .input-group__button.cancel {
-    background-color: #fff;
-    color: #4F46E5;
-    border: 1px solid #4F46E5;
+    background-color: #ef4444;
+    color: white;
     margin-top: 0.5rem;
     margin-left: auto;
-  }
+}
   
   .task-list li .input-group__button:hover {
     background-color: #3730a3;
