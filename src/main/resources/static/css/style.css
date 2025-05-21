@@ -93,6 +93,7 @@ p {
     max-width: 800px;
     margin: 0 auto;
     box-sizing: border-box;
+    align-items: flex-start;
 }
 
 .input-fields {
@@ -116,6 +117,7 @@ p {
         width: 100%;
         box-sizing: border-box;
         padding: 0;
+        margin-bottom: 0.5rem;
     }
     
     .input-group button {
