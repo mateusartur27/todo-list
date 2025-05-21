@@ -89,8 +89,10 @@ p {
 .input-group {
     display: flex;
     gap: 0.75rem;
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .input-fields {
@@ -98,8 +100,8 @@ p {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-width: 100%;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* Regras responsivas para dispositivos móveis */
@@ -107,16 +109,20 @@ p {
     .input-group {
         flex-direction: column;
         gap: 1rem;
+        padding: 0;
     }
     
     .input-fields {
-        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0;
     }
     
     .input-group button {
         width: 100%;
         margin-left: 0;
         justify-content: center;
+        margin-top: 0.5rem;
     }
 }
 
@@ -127,6 +133,7 @@ p {
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    box-sizing: border-box;
 }
 
 .input-group input:focus {
