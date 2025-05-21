@@ -162,7 +162,8 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    margin-left: auto;
 }
 
 .input-group__buttons button.add-button {
@@ -305,7 +306,7 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     margin-left: auto;
 }
 
