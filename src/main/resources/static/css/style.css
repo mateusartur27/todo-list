@@ -94,6 +94,7 @@ p {
     margin: 0 auto;
     box-sizing: border-box;
     align-items: flex-start;
+    flex-wrap: nowrap;
 }
 
 .input-fields {
@@ -155,7 +156,7 @@ p {
     align-items: center;
     gap: 0.5rem;
     transition: background-color 0.3s ease;
-    margin-left: auto;
+    white-space: nowrap;
 }
 
 .input-group button:hover {
