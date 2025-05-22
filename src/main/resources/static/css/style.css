@@ -196,7 +196,7 @@ p {
   .edit-form {
     margin-top: 1rem;
     width: 100%;
-    border: 2px solid #4F46E5;
+    border: 1px solid #4F46E5;
   }
   
   .edit-form .input-fields {
