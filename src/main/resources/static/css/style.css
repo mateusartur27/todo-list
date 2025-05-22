@@ -205,11 +205,12 @@ p {
   
   .edit-form .input-fields input {
     width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
     box-sizing: border-box;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    transition: all 0.3s ease;
   }
   
   .edit-form .input-fields input:focus {
