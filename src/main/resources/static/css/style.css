@@ -196,7 +196,6 @@ p {
   .edit-form {
     margin-top: 1rem;
     width: 100%;
-    border: 1px solid #4F46E5;
   }
   
   .edit-form .input-fields {
@@ -396,6 +395,7 @@ p {
     transition: transform 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
+    border: 1px solid #4F46E5;
 }
 
 @media (max-width: 768px) {
@@ -566,6 +566,7 @@ p {
 
 .task-list li.completed {
     background-color: #f3f4f6;
+    border: none;
 }
 
 .task-list li.completed span {
