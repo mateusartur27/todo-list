@@ -309,6 +309,20 @@ p {
     margin-left: auto;
 }
 
+.save-button {
+    /* herda tudo de .export-button */
+}
+
+.cancel-button {
+    background-color: #ffffff;
+    color: #4F46E5;
+    border: 1px solid #4F46E5;
+}
+
+.cancel-button:hover {
+    background-color: #F3F4F6;
+}
+
 .export-button:hover {
     background-color: #3730a3;
 }
