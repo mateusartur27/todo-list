@@ -275,7 +275,6 @@ p {
   
   .task-list li .input-group__button.save {
     padding: 0.75rem 1.5rem;
-    border: 2px solid #4F46E5;
     background-color: #4F46E5;
     color: #fff;
     border-radius: 8px;
@@ -285,7 +284,6 @@ p {
     align-items: center;
     gap: 0.5rem;
     transition: background-color 0.3s ease;
-    margin-left: auto;
   }
 
   .task-list li .input-group__button.save:hover {
