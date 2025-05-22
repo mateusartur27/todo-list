@@ -338,6 +338,26 @@ p {
     color: #fff;
 }
 
+.add-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #4F46E5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
+}
+
+.add-button:hover:hover {
+  background-color: #3730a3;
+  color: #fff;
+}
+
 .filter-btn {
     padding: 0.5rem 1rem;
     border: 2px solid #4F46E5;
