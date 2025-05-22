@@ -213,7 +213,7 @@ async function carregarTarefas() {
         <button onclick="editar(${t.id})" title="Editar tarefa"><i class="fas fa-edit"></i></button>
         <button onclick="excluir(${t.id})" title="Excluir tarefa"><i class="fas fa-trash"></i></button>
       </div>
-      <form class="edit-form" style="display: none;">
+      <form class="edit-form">
         <div class="input-group">
           <div class="input-fields">
             <input name="titulo" type="text" value="${t.titulo}" required />
