@@ -393,7 +393,7 @@ p {
     background-color: #f9fafb;
     border-radius: 8px;
     transition: transform 0.2s ease;
-    box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
@@ -565,7 +565,7 @@ p {
 
 .task-list li.completed {
     background-color: #f3f4f6;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
 }
 
 .task-list li.completed span {
