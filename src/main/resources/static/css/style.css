@@ -564,8 +564,8 @@ p {
 }
 
 .task-list li.completed {
-    background-color: #c7c7c7;
-    box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+    background-color: #ececec;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .task-list li.completed span {
