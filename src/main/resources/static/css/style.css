@@ -302,7 +302,7 @@ p {
     }
 }
 
-.export-button, .input-group__buttons button[type="submit"] {
+.export-button {
     padding: 0.75rem 1.5rem;
     background-color: #4F46E5;
     color: #fff;
@@ -317,8 +317,9 @@ p {
     margin-left: auto;
 }
 
-.export-button:hover, .input-group__buttons button[type="submit"]:hover {
+.export-button:hover:hover {
     background-color: #3730a3;
+    color: #fff;
 }
 
 .filter-btn {
