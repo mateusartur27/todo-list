@@ -221,7 +221,7 @@ async function carregarTarefas() {
             <input name="data_vencimento" type="date" value="${t.data_vencimento}" required />
           </div>
           <div class="input-group__buttons">
-            <button type="submit" class="input-group__button save">
+            <button type="submit" class="input-group__button.save">
               <i class="fas fa-save"></i>
               Salvar
             </button>
