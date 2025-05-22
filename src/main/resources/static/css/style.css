@@ -390,7 +390,7 @@ p {
     align-items: flex-start;
     padding: 1rem;
     margin-bottom: 0.75rem;
-    background-color: #f9fafb;
+    background-color: #f3f4f6;
     border-radius: 8px;
     transition: transform 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -759,6 +759,45 @@ p {
 
   .task-description {
     font-size: 0.8rem;
+  }
+}
+
+/* Estilos do rodapé */
+.footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.footer-content {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.footer-credits {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer-credits span {
+  color: #4F46E5;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  
+  .footer-credits {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
   
