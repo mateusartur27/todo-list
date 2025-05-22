@@ -262,17 +262,35 @@ p {
     transition: background-color 0.3s ease;
     margin-left: auto;
   }
-  
+
+  .task-list li .input-group__button.cancel:hover {
+    background-color: #4F46E5;
+    color: #fff;
+  }
+
   .task-list li .input-group__button:hover {
     background-color: #4F46E5;
     color: #fff;
   }
   
-  .task-list li .input-group__button.cancel:hover {
+  .task-list li .input-group__button.save {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #4F46E5;
     background-color: #4F46E5;
     color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
   }
-  
+
+  .task-list li .input-group__button.save:hover {
+    background-color: #3730a3;
+  }
 
 .filter-buttons {
     display: flex;
