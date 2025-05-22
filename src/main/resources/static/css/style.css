@@ -247,21 +247,28 @@ p {
   }
   
   .task-list li .input-group__button.cancel {
+    padding: 0.75rem 1.5rem;
     background-color: #fff;
     color: #4F46E5;
-    border: 1px solid #4F46E5;
-    margin-top: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
     margin-left: auto;
   }
   
   .task-list li .input-group__button:hover {
-    background-color: #3730a3;
+    background-color: #4F46E5;
     color: #fff;
   }
   
   .task-list li .input-group__button.cancel:hover {
-    background-color: #f3f4f6;
-    color: #4F46E5;
+    background-color: #4F46E5;
+    color: #fff;
   }
   
 
@@ -307,20 +314,6 @@ p {
     gap: 0.5rem;
     transition: background-color 0.3s ease;
     margin-left: auto;
-}
-
-.save-button {
-    /* herda tudo de .export-button */
-}
-
-.cancel-button {
-    background-color: #ffffff;
-    color: #4F46E5;
-    border: 1px solid #4F46E5;
-}
-
-.cancel-button:hover {
-    background-color: #F3F4F6;
 }
 
 .export-button:hover {

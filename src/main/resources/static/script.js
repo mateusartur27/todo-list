@@ -221,11 +221,11 @@ async function carregarTarefas() {
             <input name="data_vencimento" type="date" value="${t.data_vencimento}" required />
           </div>
           <div class="input-group__buttons">
-            <button type="submit" class="export-button save-button">
+            <button type="submit" class="export-button">
               <i class="fas fa-save"></i>
               Salvar
             </button>
-            <button type="button" class="export-button cancel-button" onclick="cancelarEdicao(${t.id})">
+            <button type="button" class="input-group__button cancel" onclick="cancelarEdicao(${t.id})">
               <i class="fas fa-times"></i>
               Cancelar
             </button>
