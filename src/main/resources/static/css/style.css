@@ -111,6 +111,7 @@ p {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    margin-left: auto;
 }
 
 /* Regras responsivas para dispositivos móveis */
@@ -248,6 +249,7 @@ p {
   
   .task-list li .input-group__button.cancel {
     padding: 0.75rem 1.5rem;
+    border: 2px solid #4F46E5;
     background-color: #fff;
     color: #4F46E5;
     border: none;
@@ -301,7 +303,7 @@ p {
     }
 }
 
-.export-button {
+.export-button, .input-group__buttons button[type="submit"] {
     padding: 0.75rem 1.5rem;
     background-color: #4F46E5;
     color: #fff;
@@ -316,7 +318,7 @@ p {
     margin-left: auto;
 }
 
-.export-button:hover {
+.export-button:hover, .input-group__buttons button[type="submit"]:hover {
     background-color: #3730a3;
 }
 
@@ -415,6 +417,8 @@ p {
 .task-actions {
     display: flex;
     gap: 0.5rem;
+    justify-content: flex-end;
+    margin-left: auto;
 }
 
 .task-actions button {
