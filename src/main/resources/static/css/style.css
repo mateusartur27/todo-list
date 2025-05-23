@@ -12,7 +12,7 @@ body {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Estilos para o cabeçalho com informações do usuário */
@@ -770,8 +770,8 @@ p {
   font-size: 0.9rem;
   color: #4b5563;
   border-top: 1px solid #e5e7eb;
-  box-shadow: 0 -1px 3px rgba(0,0,0,1);
-  position: fixed;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+  position: relative;
   bottom: 0;
   left: 0;
   margin: 0;
