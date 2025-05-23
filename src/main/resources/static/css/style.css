@@ -125,8 +125,8 @@ p {
 @media (max-width: 768px) {
     .container {
         margin: 20px auto;
-        padding: 30px;
         width: calc(100% - 40px);
+        padding: 30px;
     }
     
     .input-group {
@@ -732,10 +732,8 @@ p {
   
 @media (max-width: 768px) {
   .container {
-    margin: 20px auto;
     padding: 30px;
-    width: calc(100% - 40px);
-}
+  }
 
   .input-group {
     flex-direction: column;
@@ -758,10 +756,8 @@ p {
 
 @media (max-width: 480px) {
   .container {
-    margin: 20px auto;
     padding: 30px;
-    width: calc(100% - 40px);
-}
+  }
 
   .input-group input {
     font-size: 0.9rem;
