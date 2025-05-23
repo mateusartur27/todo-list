@@ -67,9 +67,14 @@
   <script src="index.js"></script>
   <script src="script.js"></script>
 
-  <footer class="site-footer">
-    <p>© 2025 João Pedro | Júlio José | Mateus Artur | Rafael Araújo</p>
-  </footer>
+  <script>
+    window.addEventListener('load', function() {
+      const footer = document.createElement('footer');
+      footer.className = 'site-footer';
+      footer.innerHTML = '<p>© 2025 João Pedro | Júlio José | Mateus Artur | Rafael Araújo</p>';
+      document.body.appendChild(footer);
+    });
+  </script>
 
 </body>
 </html>
