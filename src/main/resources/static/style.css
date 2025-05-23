@@ -403,22 +403,3 @@ body {
     opacity: 0;
   }
 }
-
-.site-footer {
-  background-color: #f3f4f6;
-  padding: 1.5rem 0;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #4b5563;
-  border-top: 1px solid #e5e7eb;
-}
-
-.site-footer .footer-nav a {
-  color: #4F46E5;
-  text-decoration: none;
-  margin: 0 0.5rem;
-}
-
-.site-footer .footer-nav a:hover {
-  text-decoration: underline;
-}
