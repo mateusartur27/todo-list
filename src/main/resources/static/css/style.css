@@ -9,11 +9,12 @@ body {
 .container {
   max-width: 800px;
   width: calc(100% - 40px);
-  margin: 20px auto;
+  margin: 50px auto;
   background-color: #ffffff;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  min-height: 620px;
 }
 
 /* Estilos para o cabeçalho com informações do usuário */
@@ -773,7 +774,6 @@ p {
   text-align: center;
   font-size: 0.9rem;
   color: #4b5563;
-  border-top: 1px solid #e5e7eb;
   box-shadow: 0 2px 4px rgba(0,0,0,0.7);
   position: relative;
   bottom: 0;

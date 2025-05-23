@@ -1,6 +1,7 @@
 /* Estilos para a página de autenticação */
 .auth-container {
   max-width: 500px;
+  width: calc(100% - 40px);
   margin: 50px auto;
   background-color: white;
   padding: 30px;
