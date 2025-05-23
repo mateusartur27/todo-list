@@ -123,12 +123,6 @@ p {
 
 /* Regras responsivas para dispositivos móveis */
 @media (max-width: 768px) {
-    .container {
-        margin: 20px auto;
-        width: calc(100% - 40px);
-        padding: 30px;
-    }
-    
     .input-group {
         gap: 1rem;
         padding: 0;
