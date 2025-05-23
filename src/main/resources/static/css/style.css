@@ -390,7 +390,7 @@ p {
     align-items: flex-start;
     padding: 1rem;
     margin-bottom: 0.75rem;
-    background-color: #f3f4f6;
+    background-color: #ffffff;
     border-radius: 8px;
     transition: transform 0.2s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -564,7 +564,7 @@ p {
 }
 
 .task-list li.completed {
-    background-color: #ececec;
+    background-color: #f3f4f6;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
