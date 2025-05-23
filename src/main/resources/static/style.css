@@ -8,11 +8,13 @@ body {
 
 .container {
   max-width: 800px;
-  margin: 0 auto;
-  background-color: white;
-  padding: 20px;
+  width: calc(100% - 40px);
+  margin: 50px auto;
+  background-color: #ffffff;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  min-height: 620px;
 }
 
 /* Estilos do formulário */
