@@ -323,18 +323,19 @@ p {
 }
 
 .export-button {
-    display: flex;
-    justify-content: center;    /* centra o ícone + texto no meio */
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background-color: #4F46E5;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    gap: 0.5rem;
-    transition: background-color 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  background-color: #4F46E5;
+  color: #fff;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .export-button:hover:hover {
@@ -343,18 +344,19 @@ p {
 }
 
 .add-button {
-    display: flex;
-    justify-content: center;    /* centra o ícone + texto no meio */
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background-color: #4F46E5;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    gap: 0.5rem;
-    transition: background-color 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  background-color: #4F46E5;
+  color: #fff;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .add-button:hover:hover {
