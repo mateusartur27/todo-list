@@ -725,6 +725,10 @@ p {
 
   
 @media (max-width: 768px) {
+  .container {
+    padding: 30px;
+  }
+
   .input-group {
     flex-direction: column;
   }
@@ -745,6 +749,10 @@ p {
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 30px;
+  }
+
   .input-group input {
     font-size: 0.9rem;
   }
