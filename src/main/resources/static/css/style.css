@@ -764,13 +764,13 @@ p {
   
 .site-footer {
   width: 100%;
-  background-color: #f3f4f6;
-  padding: 1rem 0;
+  background-color: #ffffff;
+  padding: 0;
   text-align: center;
   font-size: 0.9rem;
   color: #4b5563;
   border-top: 1px solid #e5e7eb;
-  box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 -1px 3px rgba(0,0,0,1);
   position: relative;
   bottom: 0;
 }
