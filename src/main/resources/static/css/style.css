@@ -727,6 +727,7 @@ p {
 @media (max-width: 768px) {
   .container {
     padding: 30px;
+    max-width: calc(100% - 40px);
   }
 
   .input-group {
@@ -751,6 +752,7 @@ p {
 @media (max-width: 480px) {
   .container {
     padding: 30px;
+    max-width: calc(100% - 40px);
   }
 
   .input-group input {
