@@ -173,11 +173,22 @@ p {
     transition: background-color 0.3s ease;
 }
 
-.input-group__buttons button.add-button {
+.add-button {
     content: "+ Adicionar";
+    padding: 0.75rem 1.5rem;
+    background-color: #4F46E5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
 }
 
-.input-group__buttons button:hover {
+.add-button:hover {
     background-color: #3730a3;
 }
 
@@ -343,7 +354,7 @@ p {
   margin-left: auto;
 }
 
-.export-button:hover:hover {
+.export-button:hover {
     background-color: #3730a3;
     color: #fff;
 }
@@ -364,7 +375,7 @@ p {
   margin-left: auto;
 }
 
-.add-button:hover:hover {
+.add-button:hover {
   background-color: #3730a3;
   color: #fff;
 }
